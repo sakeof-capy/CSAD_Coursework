@@ -14,21 +14,21 @@ public class StandardHolder<Key extends Comparable<Key>, Holdable>
 
     @Override
     public void hold(Key key, Holdable holdable) throws HolderException {
-        if(keyToHoldable.containsKey(key))
+        if(holds(key))
             throw new HolderException("Holdable related to the key " + key.toString() + " already held.");
         keyToHoldable.put(key, holdable);
     }
 
     @Override
     public void release(Key key) throws HolderException {
-        if(!keyToHoldable.containsKey(key))
+        if(!holds(key))
             throw new HolderException("Holdable related to the key " + key.toString() + " already held.");
         keyToHoldable.remove(key);
     }
 
     @Override
     public Optional<Holdable> getHoldable(Key key) {
-        if(!keyToHoldable.containsKey(key))
+        if(!holds(key))
             return Optional.empty();
         return Optional.of(keyToHoldable.get(key));
     }
