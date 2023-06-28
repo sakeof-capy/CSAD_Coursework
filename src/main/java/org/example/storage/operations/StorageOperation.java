@@ -1,7 +1,9 @@
 package org.example.storage.operations;
 
+import org.example.exceptions.storage.StorageException;
 import org.example.utilities.dynobjects.DynamicObject;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,5 +22,5 @@ public interface StorageOperation {
      *         Optional.empty() is returned when the operation
      *         is supposed to be 'void'
      */
-    Optional<DynamicObject> execute(DynamicObject params);
+    Optional<List<DynamicObject>> execute(DynamicObject params) throws StorageException;
 }

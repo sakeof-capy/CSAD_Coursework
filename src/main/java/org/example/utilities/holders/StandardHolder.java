@@ -38,5 +38,10 @@ public class StandardHolder<Key extends Comparable<Key>, Holdable>
         return keyToHoldable.containsKey(key);
     }
 
+    @Override
+    public Map<Key, Holdable> getMap() {
+        return keyToHoldable;
+    }
+
     private final Map<Key, Holdable> keyToHoldable;
 }

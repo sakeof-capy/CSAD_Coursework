@@ -8,6 +8,7 @@ import org.example.storage.operations.StorageOperation;
 import org.example.utilities.holders.Holder;
 import org.example.utilities.holders.StandardHolder;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -76,6 +77,11 @@ public class StorageOperationFactoryAttacher {
         @Override
         public boolean holds(OperationType operationType) {
             return holder.holds(operationType);
+        }
+
+        @Override
+        public Map<OperationType, Function<Storage, StorageOperation>> getMap() {
+            return holder.getMap();
         }
 
         private final Holder<OperationType, Function<Storage, StorageOperation>> holder;

@@ -4,6 +4,7 @@ import org.example.exceptions.HolderException;
 import org.example.utilities.holders.Holder;
 import org.example.utilities.holders.StandardHolder;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class StandardDynamicObject implements DynamicObject {
@@ -32,6 +33,11 @@ public class StandardDynamicObject implements DynamicObject {
     @Override
     public Optional<String> get(String keyName) {
         return holder.getHoldable(keyName);
+    }
+
+    @Override
+    public Map<String, String> getMap() {
+        return holder.getMap();
     }
 
     private final Holder<String, String> holder;

@@ -2,6 +2,7 @@ package org.example.utilities.holders;
 
 import org.example.exceptions.HolderException;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface Holder<Key, Holdable>  {
@@ -9,4 +10,5 @@ public interface Holder<Key, Holdable>  {
     void release(Key key) throws HolderException;
     Optional<Holdable> getHoldable(Key key);
     boolean holds(Key key);
+    Map<Key, Holdable> getMap();
 }

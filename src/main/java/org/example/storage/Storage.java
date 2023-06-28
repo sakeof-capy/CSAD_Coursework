@@ -1,12 +1,12 @@
 package org.example.storage;
 
-import org.example.exceptions.StorageException;
 
-import java.util.Optional;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface Storage extends AutoCloseable {
-    void executeUpdate(String sql) throws StorageException;
-    /* Determine which result type to return: Optional<...>?*/ void executeQuery(String sql);
+    void executeUpdate(String sql) throws SQLException;
+    /* Determine which result type to return: Optional<...>?*/ ResultSet executeQuery(String sql) throws SQLException;
     /*
         There might also be some additional methods that
         would allow to use prepared statements or something...
