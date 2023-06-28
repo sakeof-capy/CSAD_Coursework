@@ -22,7 +22,7 @@ public class ReadCategoryOperation implements StorageOperation {
     public Optional<List<DynamicObject>> execute(DynamicObject params) throws StorageException {
         try {
             List<DynamicObject> resultList = new ArrayList<>();
-            ResultSet resultSet = creator.executeQuery("select * from product");
+            ResultSet resultSet = creator.executeQuery("select * from category");
             while(resultSet.next()){
                 DynamicObject object = new StandardDynamicObject();
                 object.put("category_name", resultSet.getString("category_name"));

@@ -23,7 +23,7 @@ public class TestDB {
         } catch (StorageException e) {
             fail(e.getMessage());
         }
-        readProduct(creator);
+        assertEquals(readProduct(creator).size(), 5);
 
         for (int i = 0; i < 10; ++i){
             DynamicObject someObject = new StandardDynamicObject();
@@ -50,7 +50,7 @@ public class TestDB {
             }
         }
         System.out.println("Created");
-        readProduct(creator);
+        assertEquals(readProduct(creator).size(), 15);
 
         for (int i = 0; i < 10; ++i){
             DynamicObject someObject = new StandardDynamicObject();
@@ -76,7 +76,7 @@ public class TestDB {
             }
         }
         System.out.println("Updated");
-        readProduct(creator);
+        assertEquals(readProduct(creator).size(), 15);
 
         for (int i = 0; i < 10; ++i){
             DynamicObject someObject = new StandardDynamicObject();
@@ -90,13 +90,13 @@ public class TestDB {
         }
         System.out.println("Deleted");
 
-        readProduct(creator);
+        assertEquals(readProduct(creator).size(), 5);
 
 
-
+        creator.close();
     }
 
-    private static void readProduct(DBConnector creator) {
+    private static List<DynamicObject> readProduct(DBConnector creator) {
         ReadProductOperation readProductOperation = new ReadProductOperation(creator);
         DynamicObject object = new StandardDynamicObject();
         Optional<List<DynamicObject>> optional = Optional.empty();
@@ -107,7 +107,7 @@ public class TestDB {
         }
         List<DynamicObject> products = optional.get();
 
-        for (DynamicObject product : products){
+        /*for (DynamicObject product : products){
             String productName = product.get("product_name").get();
             String categoryName = product.get("category_name").get();
             String productDescription = product.get("product_description").get();
@@ -125,6 +125,7 @@ public class TestDB {
                     "price: " + price + ";\n" +
                     "producer: " + producer + ";\n" +
                     "}");
-        }
+        }*/
+        return products;
     }
 }

@@ -25,7 +25,7 @@ public class UpdateCategoryOperation implements StorageOperation {
             String categoryName = params.get("category_name").get();
             String categoryDescription = params.get("category_description").get();
 
-            creator.executeUpdate(String.format("update category category_description = '%s' where category_name = '%s';", categoryDescription, categoryName));
+            creator.executeUpdate(String.format("update category set category_description = '%s' where category_name = '%s';", categoryDescription, categoryName));
 
             return Optional.empty();
         } catch (NoSuchElementException e) {
