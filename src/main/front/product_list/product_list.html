@@ -3,6 +3,7 @@
 <head>
   <title>Product List Managing</title>
   <style>
+    
     table {
       border-collapse: collapse;
       width: 100%;
@@ -97,9 +98,22 @@
     .manage-groups-button:hover {
         background-color: #353835;
     }
+
+    #form_open_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; /* Adjust the distance from the bottom as needed */
+      right: 10px; /* Adjust the distance from the right as needed */
+      z-index: 999; /* Ensure the button appears above other elements */
+    }
+
+    #form_open_button:hover {
+        background-color: #353835;
+    }
   </style>
 </head>
 <body>
+  <button id="form_open_button" type="button" class="btn btn-primary">+</button>
   <table>
     <thead>
       <tr>
