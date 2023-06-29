@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* CSS styles for the product list and category */
+    body {
+      background-color: #f0f5f0;
+    }
+
+    .category {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px;
+      background-color: #66bb6a;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .product-list-container {
+      text-align: center;
+    }
+
+    .product-list {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      max-width: 600px;
+      background-color: #f1f8ec;
+    }
+
+    .category-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    /* CSS styles for the product table */
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .product-table th,
+    .product-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product-table th {
+      background-color: #e0e0e0;
+    }
+
+    /* CSS styles for buttons */
+    .btn-container {
+      text-align: center;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-update {
+      background-color: #4caf50;
+    }
+
+    .btn-delete {
+      background-color: #f44336;
+    }
+
+    .btn:hover {
+      background-color: #353835;
+    }
+    .manage-groups-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .manage-groups-button {
+        font-size: 24px;
+        padding: 16px 32px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .manage-groups-button:hover {
+        background-color: #353835;
+    }
+  </style>
+  <script>
+    // JavaScript function to toggle product lists
+    function toggleProductList(id) {
+      var productList = document.getElementById("product-list-" + id);
+      productList.style.display = productList.style.display === "none" ? "table" : "none";
+    }
+  </script>
+</head>
+<body>
+    <div class="manage-groups-container">
+        <button class="manage-groups-button">Manage Products</button>
+    </div>
+  <div class="category-container">
+    <div class="category" onclick="toggleProductList(1)">
+      <div class="category-name">Category 1</div>
+    </div>
+    <div class="category" onclick="toggleProductList(2)">
+      <div class="category-name">Category 2</div>
+    </div>
+    <div class="category" onclick="toggleProductList(3)">
+      <div class="category-name">Category 3</div>
+    </div>
+    <div class="category" onclick="toggleProductList(4)">
+      <div class="category-name">Category 4</div>
+    </div>
+  </div>
+
+  <div class="product-list-container">
+    <div id="product-list-1" class="product-list" style="display: none;">
+      <div class="category-name">Category 1</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 1</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$19.99</td>
+            <td>10</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 2</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$29.99</td>
+            <td>5</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="product-list-2" class="product-list" style="display: none;">
+      <div class="category-name">Category 2</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 3</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$39.99</td>
+            <td>85675647</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 4</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$49.99</td>
+            <td>3</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="product-list-3" class="product-list" style="display: none;">
+      <div class="category-name">Category 3</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 5</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$59.99</td>
+            <td>6</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 6</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$69.99</td>
+            <td>7</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="product-list-4" class="product-list" style="display: none;">
+      <div class="category-name">Category 4</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 7</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$79.99</td>
+            <td>4</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 8</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$89.99</td>
+            <td>2</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
