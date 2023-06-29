@@ -97,17 +97,11 @@
         background-color: #353835;
     }
   </style>
-  <script>
-    // JavaScript function to toggle product lists
-    function toggleProductList(id) {
-      var productList = document.getElementById("product-list-" + id);
-      productList.style.display = productList.style.display === "none" ? "table" : "none";
-    }
-  </script>
+
 </head>
 <body>
     <div class="manage-groups-container">
-        <button class="manage-groups-button">Manage Products</button>
+        <button id="manageGroupsButton" class="manage-groups-button">Manage Products</button>
     </div>
   <div class="category-container">
     <div class="category" onclick="toggleProductList(1)">
@@ -121,6 +115,9 @@
     </div>
     <div class="category" onclick="toggleProductList(4)">
       <div class="category-name">Category 4</div>
+    </div>
+    <div class="category" onclick="toggleProductList(5)">
+      <div class="category-name">Category 5</div>
     </div>
   </div>
 
@@ -260,6 +257,51 @@
         </tbody>
       </table>
     </div>
+    <div id="product-list-5" class="product-list" style="display: none;">
+      <div class="category-name">Category 5</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 7</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$79.99</td>
+            <td>4</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 8</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$89.99</td>
+            <td>2</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+  <script src="category_list.js"></script>
+  <!-- <script>
+    // JavaScript function to toggle product lists
+    function toggleProductList(id) {
+      var productList = document.getElementById("product-list-" + id);
+      productList.style.display = productList.style.display === "none" ? "table" : "none";
+    }
+    
+    document.getElementById("manageGroupsButton").addEventListener("click", function() {
+      window.location.href = "../product_list/product_list.html";
+    });
+  </script> -->
 </body>
 </html>
