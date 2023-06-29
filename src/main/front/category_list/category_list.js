@@ -70,6 +70,13 @@ function readProduct(product) {
     };
 }
 
+function readCategory(cat) {
+    return {
+        categoryName : cat.category_name,
+        categoryDescription : cat.category_description
+    };
+}
+
 function createTh(innerText) {
     const thName = document.createElement("th");
     thName.innerText = innerText;
@@ -217,8 +224,11 @@ async function sendRequest(url, queryType, data)
     }
 }
 
-function getCategoryNames(products) {
-    return [...new Set(products.map(product => product.categoryName))];
+async function getCategories() {
+    const res = await sendRequest("/categories", "GET");
+    const data = await res.json();
+    return data.map(readCategory);
+    //return [...new Set(products.map(product => product.categoryName))];
 }
 
 function getCategoryNamesToProducts(categoryNames, allProducts) {
@@ -237,7 +247,8 @@ async function refreshAllProductsData() {
     if(res) {
         const data = await res.json();
         const products = data.map(readProduct);
-        const categoryNames = getCategoryNames(products);
+        const categories = await getCategories();
+        const categoryNames = categories.map(cat => cat.categoryName);
         const catsToProds = getCategoryNamesToProducts(categoryNames, products);
         Object.entries(catsToProds)
             .forEach(([catName, products]) => createCategory(catName, products));
@@ -248,11 +259,10 @@ async function refreshAllProductsData() {
 
 async function main() {
     await refreshAllProductsData();
+    manageGroupsButton.addEventListener("click", switchToManagingProductList);
 }
 
 main();
-  
-manageGroupsButton.addEventListener("click", switchToManagingProductList);
 
 // createCategory("CategoryNEW", [
 //     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),

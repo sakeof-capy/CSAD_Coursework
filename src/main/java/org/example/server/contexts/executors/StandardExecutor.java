@@ -2,13 +2,12 @@ package org.example.server.contexts.executors;
 
 import com.sun.net.httpserver.HttpExchange;
 import org.example.exceptions.storage.DataConflictException;
+import org.example.exceptions.storage.InvalidParamSetException;
 import org.example.exceptions.storage.NotFoundException;
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.operations.StorageOperation;
 import org.example.utilities.dynobjects.DynamicObject;
 import org.example.utilities.http.HttpUtils;
-
-import java.util.NoSuchElementException;
 
 public class StandardExecutor implements StorageOperationExecutor {
     @Override
@@ -19,9 +18,9 @@ public class StandardExecutor implements StorageOperationExecutor {
                 HttpUtils.sendResponseOperationResult(exchange, 200, res.get());
             else
                 HttpUtils.sendResponse(exchange, 204);
-        } catch (NoSuchElementException e) {
+        } catch (InvalidParamSetException e) {
             HttpUtils.sendResponse(exchange, 400, e.getMessage());
-        }catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             HttpUtils.sendResponse(exchange, 404, e.getMessage());
         } catch (DataConflictException e) {
             HttpUtils.sendResponse(exchange, 409, e.getMessage());

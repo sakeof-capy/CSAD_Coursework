@@ -220,24 +220,24 @@
       <h2>Add Product</h2>
       <form>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="nameInputCreate" name="name" required>
 
         <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <input type="text" id="categoryInputCreate" name="category" required>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputCreate" name="description"></textarea>
 
         <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required>
+        <input type="number" id="stockInputCreate" pattern="^\d+$" title="integer value" name="stock" required>
 
         <label for="price">Price:</label>
-        <input type="text" id="price" name="price" required>
+        <input type="text" id="priceInputCreate" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price" required>
 
         <label for="producer">Producer:</label>
-        <input type="text" id="producer" name="producer" required>
+        <input type="text" id="producerInputCreate" name="producer">
 
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" id="submitCreateFormButton" class="btn btn-primary">Add</button>
         <button id="closeFormButton" type="button" class="btn btn-delete">Cancel</button>
       </form>
     </div>

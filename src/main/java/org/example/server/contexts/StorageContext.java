@@ -25,11 +25,7 @@ public class StorageContext implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) {
-            System.out.println(exchange.getRequestURI() + " " + exchange.getRequestMethod());
-//        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
-//            HttpUtils.writeOptions(exchange);
-//            return;
-//        }
+        System.out.println(exchange.getRequestURI() + " " + exchange.getRequestMethod());
         try {
             final var requestMethod = exchange.getRequestMethod();
             final var uri = exchange.getRequestURI();
