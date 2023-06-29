@@ -89,29 +89,29 @@ function createTdWithText(txt) {
     return td;
 }
 
-function createTdWithUpdateButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
+// function createTdWithUpdateButton() {
+//     const td = document.createElement("td");
+//     td.setAttribute("class", "btn-container");
 
-    const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-update");
-    button.innerText = "Update";
+//     const button = document.createElement("button");
+//     button.setAttribute("class", "btn btn-update");
+//     button.innerText = "Update";
     
-    td.appendChild(button);
-    return td;
-}
+//     td.appendChild(button);
+//     return td;
+// }
 
-function createTdWithDeleteButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
+// function createTdWithDeleteButton() {
+//     const td = document.createElement("td");
+//     td.setAttribute("class", "btn-container");
 
-    const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-delete");
-    button.innerText = "Delete";
+//     const button = document.createElement("button");
+//     button.setAttribute("class", "btn btn-delete");
+//     button.innerText = "Delete";
     
-    td.appendChild(button);
-    return td;
-}
+//     td.appendChild(button);
+//     return td;
+// }
 
 function createTrFromProduct(product) {
     const tr = document.createElement("tr");
@@ -119,9 +119,9 @@ function createTrFromProduct(product) {
     const tdDescription = createTdWithText(product.productDescription);
     const tdPrice = createTdWithText('$' + product.productPrice);
     const tdStock = createTdWithText(product.productStock);
-    const tdUpdate = createTdWithUpdateButton();
-    const tdDelete = createTdWithDeleteButton();
-    [tdName, tdDescription, tdPrice, tdStock, tdUpdate, tdDelete]
+    // const tdUpdate = createTdWithUpdateButton();
+    // const tdDelete = createTdWithDeleteButton();
+    [tdName, tdDescription, tdPrice, tdStock]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
