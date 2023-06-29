@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category Managing</title>
+  <style>
+    body {
+      background-color: #f1f1f1;
+      font-family: Arial, sans-serif;
+    }
+
+    .category {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px;
+      background-color: #66bb6a;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .product-list-container {
+      text-align: center;
+    }
+
+    .product-list {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      max-width: 600px;
+      background-color: #f1f8ec;
+    }
+
+    .category-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .product-table th,
+    .product-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product-table th {
+      background-color: #e0e0e0;
+    }
+
+    .btn-container {
+      text-align: center;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-update {
+      background-color: #4caf50;
+    }
+
+    .btn-delete {
+      background-color: #f44336;
+    }
+
+    .btn:hover {
+      background-color: #353835;
+    }
+    .manage-groups-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .manage-groups-button {
+        font-size: 24px;
+        padding: 16px 32px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .manage-groups-button:hover {
+        background-color: #353835;
+    }
+  </style>
+</head>
+<body>
+    <div class="manage-groups-container">
+        <button id="manageGroupsButton" class="manage-groups-button">Manage Products</button>
+    </div>
+  <div id="categoryContainer" class="category-container">
+    <!-- <div class="category" onclick="toggleProductList(product-list-1)">
+      <div class="category-name">Category 1</div>
+    </div> -->
+  </div>
+
+  <div id="productListContainer" class="product-list-container">
+    <!-- <div id="product-list-1" class="product-list" >
+      <div class="category-name">Category 1</div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Product 1</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$19.99</td>
+            <td>10</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Product 2</td>
+            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+            <td>$29.99</td>
+            <td>5</td>
+            <td class="btn-container"><button class="btn btn-update">Update</button></td>
+            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+  </div>
+  <script src="category_list.js"></script>
+</body>
+</html>
