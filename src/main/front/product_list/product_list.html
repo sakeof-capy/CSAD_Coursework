@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product List</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover td {
+      background-color: #ddd;
+    }
+
+    td:nth-child(5),
+    td:nth-child(6),
+    th:nth-child(5),
+    th:nth-child(6) {
+      text-align: right;
+    }
+
+    .stock-low {
+      background-color: #FFCDD2;
+    }
+
+    .price-highlight {
+      color: #FF5722;
+      font-weight: bold;
+    }
+
+    .description {
+      max-width: 250px;
+      word-wrap: break-word;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #353835;
+    }
+
+    .btn-delete {
+      background-color: #f44336;
+    }
+
+    .btn-update {
+      background-color: #4CAF50;
+    }
+
+    tr {
+      height: 48px;
+    }
+
+    .manage-groups-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .manage-groups-button {
+        font-size: 24px;
+        padding: 16px 32px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .manage-groups-button:hover {
+        background-color: #353835;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Stock</th>
+        <th class="align-right">Price</th>
+        <th class="align-right">Producer</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <tr>
+        <td>Product 1</td>
+        <td>Category 1</td>
+        <td class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique lacus a justo iaculis hendrerit. Fusce consequat pulvinar mauris, et auctor odio pharetra eu. Nam tincidunt ex eget pulvinar.</td>
+        <td class="stock-low">3</td>
+        <td class="price-highlight align-right">$9.99</td>
+        <td class="align-right">Producer 1</td>
+        <td class="btn-container"><button class="btn btn-update">Update</button></td>
+        <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
+      </tr>
+      <!-- Rest of the rows -->
+    </tbody>
+  </table>
+  <div class="manage-groups-container">
+      <button class="manage-groups-button">Manage Groups</button>
+  </div>
+</body>
+</html>
