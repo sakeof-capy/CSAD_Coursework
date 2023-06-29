@@ -97,32 +97,19 @@
         background-color: #353835;
     }
   </style>
-
 </head>
 <body>
     <div class="manage-groups-container">
         <button id="manageGroupsButton" class="manage-groups-button">Manage Products</button>
     </div>
-  <div class="category-container">
-    <div class="category" onclick="toggleProductList(1)">
+  <div id="categoryContainer" class="category-container">
+    <!-- <div class="category" onclick="toggleProductList(product-list-1)">
       <div class="category-name">Category 1</div>
-    </div>
-    <div class="category" onclick="toggleProductList(2)">
-      <div class="category-name">Category 2</div>
-    </div>
-    <div class="category" onclick="toggleProductList(3)">
-      <div class="category-name">Category 3</div>
-    </div>
-    <div class="category" onclick="toggleProductList(4)">
-      <div class="category-name">Category 4</div>
-    </div>
-    <div class="category" onclick="toggleProductList(5)">
-      <div class="category-name">Category 5</div>
-    </div>
+    </div> -->
   </div>
 
-  <div class="product-list-container">
-    <div id="product-list-1" class="product-list" style="display: none;">
+  <div id="productListContainer" class="product-list-container">
+    <!-- <div id="product-list-1" class="product-list" >
       <div class="category-name">Category 1</div>
       <table class="product-table">
         <thead>
@@ -154,154 +141,8 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div id="product-list-2" class="product-list" style="display: none;">
-      <div class="category-name">Category 2</div>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 3</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$39.99</td>
-            <td>85675647</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-          <tr>
-            <td>Product 4</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$49.99</td>
-            <td>3</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div id="product-list-3" class="product-list" style="display: none;">
-      <div class="category-name">Category 3</div>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 5</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$59.99</td>
-            <td>6</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-          <tr>
-            <td>Product 6</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$69.99</td>
-            <td>7</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div id="product-list-4" class="product-list" style="display: none;">
-      <div class="category-name">Category 4</div>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 7</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$79.99</td>
-            <td>4</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-          <tr>
-            <td>Product 8</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$89.99</td>
-            <td>2</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div id="product-list-5" class="product-list" style="display: none;">
-      <div class="category-name">Category 5</div>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 7</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$79.99</td>
-            <td>4</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-          <tr>
-            <td>Product 8</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$89.99</td>
-            <td>2</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    </div> -->
   </div>
   <script src="category_list.js"></script>
-  <!-- <script>
-    // JavaScript function to toggle product lists
-    function toggleProductList(id) {
-      var productList = document.getElementById("product-list-" + id);
-      productList.style.display = productList.style.display === "none" ? "table" : "none";
-    }
-    
-    document.getElementById("manageGroupsButton").addEventListener("click", function() {
-      window.location.href = "../product_list/product_list.html";
-    });
-  </script> -->
 </body>
 </html>
