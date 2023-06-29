@@ -2,14 +2,19 @@ package org.example.utilities.dynobjects;
 
 import org.example.exceptions.HolderException;
 import org.example.utilities.holders.Holder;
-import org.example.utilities.holders.StandardHolder;
+import org.example.utilities.holders.TreeHolder;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class StandardDynamicObject implements DynamicObject {
     public StandardDynamicObject() {
-        this.holder = new StandardHolder<>();
+        this.holder = new TreeHolder<>();
+    }
+
+    public StandardDynamicObject(TreeMap<String, String> treeMap) {
+        this.holder = new TreeHolder<>(treeMap);
     }
 
     @Override

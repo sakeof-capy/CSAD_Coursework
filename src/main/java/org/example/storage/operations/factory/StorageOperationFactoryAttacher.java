@@ -6,7 +6,7 @@ import org.example.factories.OneParamFactory;
 import org.example.storage.Storage;
 import org.example.storage.operations.StorageOperation;
 import org.example.utilities.holders.Holder;
-import org.example.utilities.holders.StandardHolder;
+import org.example.utilities.holders.TreeHolder;
 
 import java.util.Map;
 import java.util.Optional;
@@ -48,7 +48,7 @@ public class StorageOperationFactoryAttacher {
     private static class StorageOperationFactory implements OneParamFactory<StorageOperation, OperationType>,
             Holder<OperationType, Function<Storage, StorageOperation>> {
         public StorageOperationFactory(Storage storage) {
-            this.holder = new StandardHolder<>();
+            this.holder = new TreeHolder<>();
             this.storage = storage;
         }
 
