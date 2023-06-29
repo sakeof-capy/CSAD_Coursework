@@ -40,7 +40,7 @@ public class StorageContext implements HttpHandler {
                     .orElse(new StandardDynamicObject());
             operationExecutor.executeOperation(operation, params, exchange);
         } catch (IllegalArgumentException e) {
-            System.out.println("Endpoint not found.");
+            System.out.println("Endpoint not found: " + e.getMessage());
             HttpUtils.sendResponse(exchange, 404);
         } catch (CreationException e) {
             e.printStackTrace();
