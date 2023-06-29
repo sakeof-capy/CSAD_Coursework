@@ -12,7 +12,8 @@ import org.example.storage.operations.factory.OperationType;
 import org.example.utilities.dynobjects.StandardDynamicObject;
 import org.example.utilities.http.HttpUtils;
 
-import java.io.IOException;
+
+import static org.example.utilities.http.HttpUtils.extractMergedParamsFromBodyAndQuery;
 
 public class StorageContext implements HttpHandler {
     public StorageContext(OneParamFactory<StorageOperation, OperationType> operationFactory,
@@ -30,7 +31,7 @@ public class StorageContext implements HttpHandler {
             final var operationType = operationDispatcher.dispatch(requestMethod, uri)
                     .orElseThrow(() -> new IllegalArgumentException("Non-handled endpoint: " + requestMethod + ": " + uri));
             final var operation = operationFactory.create(operationType);
-            final var params = HttpUtils.bodyToDynamicObject(exchange)
+            final var params = extractMergedParamsFromBodyAndQuery(exchange)
                     .orElse(new StandardDynamicObject());
             operationExecutor.executeOperation(operation, params, exchange);
         } catch (IllegalArgumentException e) {
@@ -42,6 +43,7 @@ public class StorageContext implements HttpHandler {
     }
 
     public void mapEndpointToOperation(String requestMethod, String uri, OperationType operationType) throws HolderException {
+        System.out.println("Endpoint added: " + requestMethod + ' ' + uri);
         operationDispatcher.addEndpoint(requestMethod, uri, operationType);
     }
 

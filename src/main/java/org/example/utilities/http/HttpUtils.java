@@ -54,8 +54,45 @@ public class HttpUtils {
         return Optional.empty();
     }
 
+    public static Optional<DynamicObject> queryParamsToDynamicObject(HttpExchange exchange) {
+        if(hasEmptyQueryParams(exchange))
+            return Optional.empty();
+        final var res = new StandardDynamicObject();
+        final var query = exchange.getRequestURI().getQuery();
+        var tokens = query.split("&");
+        for (String token : tokens) {
+            var params = token.split("=");
+            if (params.length == 2) {
+                res.put(params[0], params[1]);
+            }
+        }
+        return Optional.of(res);
+    }
+
+    public static Optional<DynamicObject> extractMergedParamsFromBodyAndQuery(HttpExchange exchange) {
+        final var bodyParams = bodyToDynamicObject(exchange);
+        final var queryParams = queryParamsToDynamicObject(exchange);
+        if(bodyParams.isPresent() && queryParams.isPresent()) {
+            final var res = new StandardDynamicObject();
+            for(var param : queryParams.get().getMap().entrySet()) {
+                res.put(param.getKey(), param.getValue());
+            }
+            for(var param : bodyParams.get().getMap().entrySet()) {
+                if(res.get(param.getKey()).isEmpty())
+                    res.put(param.getKey(), param.getValue());
+            }
+            return Optional.of(res);
+
+        } else if(bodyParams.isPresent()) {
+            return bodyParams;
+        } else if(queryParams.isPresent()) {
+            return queryParams;
+        }
+        return Optional.empty();
+    }
+
     public static Optional<String> extractQueryParam(HttpExchange exchange, String paramName) {
-        var query = exchange.getRequestURI().getQuery();
+        final var query = exchange.getRequestURI().getQuery();
         return extractQueryParam(query, paramName);
     }
 

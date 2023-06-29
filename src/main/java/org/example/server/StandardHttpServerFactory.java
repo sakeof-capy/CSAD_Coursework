@@ -21,15 +21,15 @@ public class StandardHttpServerFactory implements TwoParamFactory<Server, Storag
             final var operationExecutor = new DebugExecutor();
 
             var storageContext = new StorageContext(operationFactory, operationExecutor);
-            storageContext.mapEndpointToOperation("GET", "/api/good/{name}", OperationType.READ_PRODUCT);
-            storageContext.mapEndpointToOperation("PUT", "/api/good", OperationType.CREATE_PRODUCT);
-            storageContext.mapEndpointToOperation("POST", "/api/good/{name}", OperationType.UPDATE_PRODUCT);
-            storageContext.mapEndpointToOperation("DELETE", "/api/good/{name}", OperationType.DELETE_PRODUCT);
+            storageContext.mapEndpointToOperation("GET", "/api/products", OperationType.READ_PRODUCT);
+            storageContext.mapEndpointToOperation("PUT", "/api/product", OperationType.CREATE_PRODUCT);
+            storageContext.mapEndpointToOperation("POST", "/api/product/{product_name}", OperationType.UPDATE_PRODUCT);
+            storageContext.mapEndpointToOperation("DELETE", "/api/product/{product_name}", OperationType.DELETE_PRODUCT);
 
-            storageContext.mapEndpointToOperation("GET", "/api/category/{name}", OperationType.READ_CATEGORY);
+            storageContext.mapEndpointToOperation("GET", "/api/categories", OperationType.READ_CATEGORY);
             storageContext.mapEndpointToOperation("PUT", "/api/category", OperationType.CREATE_CATEGORY);
-            storageContext.mapEndpointToOperation("POST", "/api/category/{name}", OperationType.UPDATE_CATEGORY);
-            storageContext.mapEndpointToOperation("DELETE", "/api/category/{name}", OperationType.DELETE_CATEGORY);
+            storageContext.mapEndpointToOperation("POST", "/api/category/{category_name}", OperationType.UPDATE_CATEGORY);
+            storageContext.mapEndpointToOperation("DELETE", "/api/category/{category_name~}", OperationType.DELETE_CATEGORY);
 
             server.addContext("/api", storageContext);
             return server;
