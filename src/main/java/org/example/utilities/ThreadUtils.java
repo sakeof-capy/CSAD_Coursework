@@ -23,4 +23,8 @@ public class ThreadUtils {
     public static void shutDownThreadPool(ExecutorService threadPool, Runnable waitingHandler) {
         shutDownThreadPool(threadPool, waitingHandler, e -> Thread.currentThread().interrupt(), 100L);
     }
+
+    public static void shutDownThreadPool(ExecutorService threadPool) {
+        shutDownThreadPool(threadPool, () -> {});
+    }
 }

@@ -23,7 +23,7 @@ public class DBConnector implements Storage {
 
     }
     @Override
-    public void executeUpdate(String sql) throws SQLException {
+    public synchronized void executeUpdate(String sql) throws SQLException {
         Statement statement = null;
         statement = conn.createStatement();
         statement.executeUpdate(sql);
@@ -31,7 +31,7 @@ public class DBConnector implements Storage {
     }
 
     @Override
-    public ResultSet executeQuery(String sql) throws SQLException {
+    public synchronized ResultSet executeQuery(String sql) throws SQLException {
 
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
