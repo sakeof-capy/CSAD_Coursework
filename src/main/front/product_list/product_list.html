@@ -110,6 +110,81 @@
     #form_open_button:hover {
         background-color: #353835;
     }
+
+    .form-popup {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f2f2f2;
+      padding: 20px;
+      max-width: 400px;
+      margin: 50px auto;
+      border-radius: 4px;
+    }
+
+    .form-container textarea {
+      height: 80px;
+      resize: none;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+
+    .form-container label {
+      font-weight: bold;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="number"],
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .form-container textarea {
+      height: 80px;
+    }
+
+    .form-container button[type="submit"],
+    .form-container button[type="button"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-container button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .form-container button[type="button"] {
+      background-color: #f44336;
+      color: #fff;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -201,8 +276,50 @@
       <!-- Rest of the rows -->
     </tbody>
   </table>
-  <div class="manage-groups-container">
-      <button class="manage-groups-button">Manage Groups</button>
+  <div id="form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Add Product</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" required>
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required>
+
+        <label for="producer">Producer:</label>
+        <input type="text" id="producer" name="producer" required>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="button" class="btn btn-delete" onclick="closeForm()">Cancel</button>
+      </form>
+    </div>
   </div>
+
+  <div class="manage-groups-container">
+    <button class="manage-groups-button">Manage Groups</button>
+  </div>
+
+  <script>
+    // JavaScript to open and close the form popup
+    function openForm() {
+      document.getElementById("form_popup").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("form_popup").style.display = "none";
+    }
+
+    // Event listener to open the form popup on button click
+    document.getElementById("form_open_button").addEventListener("click", openForm);
+  </script>
 </body>
 </html>
