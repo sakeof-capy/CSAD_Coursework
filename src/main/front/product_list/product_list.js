@@ -1,8 +1,8 @@
 const form_open_button = document.getElementById("form_open_button");
-const submitCreateFormButton = document.getElementById("submitCreateFormButton");
-const closeFormButton = document.getElementById("closeFormButton");
 const manageGroupsBtn = document.getElementById("manageGroupsBtn");
 const productTableBody = document.getElementById("productTableBody");
+const form_popup = document.getElementById("form_popup");
+const update_form_popup = document.getElementById("update_form_popup");
 
 //Create form:
 const nameInputCreate = document.getElementById("nameInputCreate");
@@ -12,7 +12,24 @@ const stockInputCreate = document.getElementById("stockInputCreate");
 const priceInputCreate = document.getElementById("priceInputCreate");
 const producerInputCreate = document.getElementById("producerInputCreate");
 
+const submitCreateFormButton = document.getElementById("submitCreateFormButton");
+const closeFormButton = document.getElementById("closeFormButton");
+
+//Update form:
+const nameInputUpdate = document.getElementById("nameInputUpdate");
+const categoryInputUpdate = document.getElementById("categoryInputUpdate");
+const descriptionInputUpdate = document.getElementById("descriptionInputUpdate");
+const stockInputUpdate = document.getElementById("stockInputUpdate");
+const priceInputUpdate = document.getElementById("priceInputUpdate");
+const producerInputUpdate = document.getElementById("producerInputUpdate");
+
+const submitUpdateFormButton = document.getElementById("submitUpdateFormButton");
+const closeUpdateFormButton = document.getElementById("closeUpdateFormButton");
+
+const notification = document.getElementById("notification");
+
 const API = "http://localhost:8000/api";
+const notification_time = 1300;
 
 function hide(elem) {
     elem.style.display = "none";
@@ -20,6 +37,16 @@ function hide(elem) {
 
 function show(elem) {
     elem.style.display = "flex";
+}
+
+function notify(text)
+{
+    notification.innerText = text;
+    show(notification);
+    const tm = setTimeout(() => {
+        hide(notification);
+        clearTimeout(tm);
+    }, notification_time);
 }
 
 /*
@@ -95,6 +122,7 @@ function createTdWithUpdateButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "Update";
+    button.addEventListener("click", openUpdateForm);
     
     td.appendChild(button);
     return td;
@@ -114,32 +142,82 @@ function createTdWithDeleteButton() {
 }
 
 function clearCreateFormFields() {
-    nameInputCreate.value = ""
-    categoryInputCreate.value = ""
-    descriptionInputCreate.value = ""
-    stockInputCreate.value = ""
-    priceInputCreate.value = ""
-    producerInputCreate.value = ""
+    nameInputCreate.value = "";
+    categoryInputCreate.value = "";
+    descriptionInputCreate.value = "";
+    stockInputCreate.value = "";
+    priceInputCreate.value = "";
+    producerInputCreate.value = "";
+}
+
+function clearUpdateFormFields() {
+    nameInputUpdate.value = "";
+    categoryInputUpdate.value = "";
+    descriptionInputUpdate.value = "";
+    stockInputUpdate.value = "";
+    priceInputUpdate.value = "";
+    producerInputUpdate.value = "";
 }
 
 function openForm() {
-    document.getElementById("form_popup").style.display = "block";
+    form_popup.style.display = "block";
 }
 
 function closeForm() {
-    document.getElementById("form_popup").style.display = "none";
+    form_popup.style.display = "none";
+    clearCreateFormFields();
+}
+
+function openUpdateForm(event) {
+    const button = event.target;
+    const row = button.closest('tr');
+    const productName = row.querySelector('td:first-child').textContent;
+    nameOfProductBeingUpdated = productName;
+    const cells = row.children;
+    nameInputUpdate.value = cells[0].textContent;
+    categoryInputUpdate.value = cells[1].textContent;
+    descriptionInputUpdate.value = cells[2].textContent;
+    stockInputUpdate.value = cells[3].textContent;
+    priceInputUpdate.value = cells[4].textContent.substring(1);
+    producerInputUpdate.value = cells[5].textContent;
+    
+    update_form_popup.style.display = "block";
+}
+
+function closeUpdateForm() {
+    update_form_popup.style.display = "none";
+    clearUpdateFormFields();
+}
+
+async function sendUpdatingProduct(productName) {
+    const res = await sendRequest("/product?product_name=" + productName, "POST", 
+    newProduct(nameInputUpdate.value,
+        categoryInputUpdate.value, descriptionInputUpdate.value, stockInputUpdate.value,
+        priceInputUpdate.value, producerInputUpdate.value), "Invalid input!");
+    console.log(newProduct(nameInputUpdate.value,
+        categoryInputUpdate.value, descriptionInputUpdate.value, stockInputUpdate.value,
+        priceInputUpdate.value, producerInputUpdate.value));
+    return res;
+}
+
+let nameOfProductBeingUpdated = undefined;
+
+async function onUpdateFormSubmitted(event) {
+    event.preventDefault();
+    console.log("Product to be updated:", nameOfProductBeingUpdated);
+    const res = await sendUpdatingProduct(nameOfProductBeingUpdated);
+    await refreshAllProductsData();
+    console.log("Updation res:", res);
+    if(res) {
+        closeUpdateForm();
+        clearUpdateFormFields();
+    }
 }
 
 async function sendCreatingProduct() {
-    // const res = await fetch("http://localhost:8000/api/product", {
-    //     method: "PUT", 
-    //     headers: {"content-type": "application/json"}, 
-    //     //body: JSON.stringify(data)
-    // });
-    // return res;
     const res = await sendRequest("/product", "PUT", newProduct(nameInputCreate.value,
         categoryInputCreate.value, descriptionInputCreate.value, stockInputCreate.value,
-        priceInputCreate.value, producerInputCreate.value));
+        priceInputCreate.value, producerInputCreate.value), "Invalid input!");
     console.log(newProduct(nameInputCreate.value,
         categoryInputCreate.value, descriptionInputCreate.value, stockInputCreate.value,
         priceInputCreate.value, producerInputCreate.value));
@@ -149,20 +227,6 @@ async function sendCreatingProduct() {
 async function onFormSubmitted(event) {
     event.preventDefault();
     const res = await sendCreatingProduct();
-    // const res = await fetch("http://localhost:8000/api/product", {
-    //     method: "PUT", 
-    //         headers: {"content-type": "application/json"}, 
-    //         body: JSON.stringify(
-    //             {
-    //                 product_name : "SomeName",
-    //                 category_name : "Fruits",
-    //                 product_description : "description",
-    //                 in_stock : "100",
-    //                 price : "123.2",
-    //                 producer : "producer"
-    //             }
-    //         )
-    // })
     await refreshAllProductsData();
     console.log("Creation res:", res);
     if(res) {
@@ -175,7 +239,7 @@ function switchToManagingCategories() {
     window.location.href = "../category_list/category_list.html";
 }
 
-async function sendRequest(url, queryType, data)
+async function sendRequest(url, queryType, data, errorText)
 {
     try {
         console.log("URL:", API + url);
@@ -191,14 +255,12 @@ async function sendRequest(url, queryType, data)
         }
         else
         {
-            console.log("Not ok!", res);
-            //notify(notificationErrorText, NotificationTypes["error"]);
+            notify(errorText ? errorText : "Error occured!");
             return false;
         }
 
     } catch (err) {
-        console.log("Error", err);
-        //notify("Server is dead.", NotificationTypes["error"]);
+        notify(err.message);
         return false;
     }
 }
@@ -238,7 +300,9 @@ async function main() {
     await refreshAllProductsData();
     form_open_button.addEventListener("click", openForm);
     closeFormButton.addEventListener("click", closeForm);
-    submitCreateFormButton.addEventListener("click", onFormSubmitted)
+    closeUpdateFormButton.addEventListener("click", closeUpdateForm);
+    submitCreateFormButton.addEventListener("click", onFormSubmitted);
+    submitUpdateFormButton.addEventListener("click", onUpdateFormSubmitted);
     manageGroupsBtn.addEventListener("click", switchToManagingCategories);
 }
 

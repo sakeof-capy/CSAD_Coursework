@@ -185,6 +185,24 @@
       color: #fff;
       margin-top: 10px;
     }
+    #notification {
+      position: fixed;
+      padding: 5px;
+      display: none;
+      border-radius: 5px;
+      z-index: 9999;
+      top: 20px;
+      color: white;
+      transition: .3;
+    }
+
+    .notification_danger {
+      background-color: red;
+    }
+
+    .notification_success {
+      background-color: green;
+    }
   </style>
 </head>
 <body>
@@ -218,7 +236,7 @@
   <div id="form_popup" class="form-popup">
     <div class="form-container">
       <h2>Add Product</h2>
-      <form>
+      <form id="createForm">
         <label for="name">Name:</label>
         <input type="text" id="nameInputCreate" name="name" required>
 
@@ -243,8 +261,38 @@
     </div>
   </div>
 
+  <div id="update_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Update Product</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputUpdate" name="name" readonly>
+
+        <label for="category">Category:</label>
+        <input type="text" id="categoryInputUpdate" name="category" required>
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputUpdate" name="description"></textarea>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stockInputUpdate" pattern="^\d+$" title="integer value" name="stock" required>
+
+        <label for="price">Price:</label>
+        <input type="text" id="priceInputUpdate" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price" required>
+
+        <label for="producer">Producer:</label>
+        <input type="text" id="producerInputUpdate" name="producer">
+
+        <button type="submit" id="submitUpdateFormButton" class="btn btn-primary">Update</button>
+        <button id="closeUpdateFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
   <div class="manage-groups-container">
     <button id="manageGroupsBtn" class="manage-groups-button">Manage Groups</button>
+  </div>
+  <div id="notification", class="notification_danger">
   </div>
   <script src="product_list.js"></script>
 </body>
