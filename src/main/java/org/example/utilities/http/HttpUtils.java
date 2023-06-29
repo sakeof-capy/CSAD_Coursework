@@ -2,6 +2,7 @@ package org.example.utilities.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.example.utilities.dynobjects.DynamicObject;
 import org.example.utilities.dynobjects.StandardDynamicObject;
@@ -107,6 +108,20 @@ public class HttpUtils {
         return requestQuery == null || requestQuery.isEmpty();
     }
 
+    public static void writeOptions(final HttpExchange exchange) {
+        try {
+            Headers headers = exchange.getResponseHeaders();
+            headers.set("Access-Control-Allow-Origin", "http://localhost:" + PORT);
+            headers.add("Access-Control-Max-Age", "86400");
+            headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS ");
+            headers.set("Access-Control-Allow-Headers", "content-type");
+            exchange.sendResponseHeaders(204, -1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void sendResponse(HttpExchange exchange, int code, String message) {
         sendResponseObject(exchange, code, message);
     }
@@ -116,8 +131,20 @@ public class HttpUtils {
     }
 
     public static void sendResponseObject(HttpExchange exchange, int code, Object obj) {
+        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "content-type");
         exchange.getResponseHeaders().add("Content-Type", "application/json");
+
         try (var responseBody = exchange.getResponseBody()){
+
+            if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+                System.out.println("CORS SENT");
+                exchange.getResponseHeaders().add("Access-Control-Max-Age", "86400");
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
+
             byte[] bytes;
             if(obj != null) {
                 var objectMapper = new ObjectMapper();
@@ -132,4 +159,6 @@ public class HttpUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static final int PORT = 8000;
 }
