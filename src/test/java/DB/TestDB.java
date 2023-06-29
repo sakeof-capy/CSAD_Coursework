@@ -1,3 +1,5 @@
+package DB;
+
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.DBConnector;
 import org.example.storage.operations.product.CreateProductOperation;
