@@ -1,14 +1,21 @@
-document.getElementById("manageGroupsBtn").addEventListener("click", function() {
-    window.location.href = "../category_list/category_list.html";
-  });
+const form_open_button = document.getElementById("form_open_button");
+const closeFormButton = document.getElementById("closeFormButton");
+const manageGroupsBtn = document.getElementById("manageGroupsBtn");
 
-  function openForm() {
+function openForm() {
     document.getElementById("form_popup").style.display = "block";
-  }
+}
 
-  function closeForm() {
+function closeForm() {
     document.getElementById("form_popup").style.display = "none";
-  }
+}
 
-  // Event listener to open the form popup on button click
-  document.getElementById("form_open_button").addEventListener("click", openForm);
+function switchToManagingCategories() {
+    window.location.href = "../category_list/category_list.html";
+}
+
+form_open_button.addEventListener("click", openForm);
+closeFormButton.addEventListener("click", closeForm);
+manageGroupsBtn.addEventListener("click", switchToManagingCategories);
+
+manageGroupsBtn.addEventListener("click", );
