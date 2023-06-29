@@ -27,7 +27,7 @@ public class Main {
             var storage = new DBConnector("client-server", "postgres",password);
             closeDbWhenShutdown(storage);
             var serverFactory = new StandardHttpServerFactory();
-            var server = serverFactory.create(null, new InetSocketAddress(HttpUtils.PORT));
+            var server = serverFactory.create(storage, new InetSocketAddress(HttpUtils.PORT));
             server.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
