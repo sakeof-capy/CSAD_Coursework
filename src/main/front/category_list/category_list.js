@@ -44,6 +44,7 @@ const manageGroupsButton = document.getElementById("manageGroupsButton");
 const categoryContainer = document.getElementById("categoryContainer");
 const productListContainer = document.getElementById("productListContainer");
 
+const API = "http://localhost:8000/api";
 let productListsCounter = 0;
 
 function newProduct(productName0, categoryName0, productDescription0, 
@@ -61,7 +62,7 @@ function newProduct(productName0, categoryName0, productDescription0,
 function readProduct(product) {
     return {
         productName  : product.product_name,
-        categoryName : product.categoryName,
+        categoryName : product.category_name,
         productDescription : product.product_description,
         productStock : product.in_stock,
         productPrice : product.price,
@@ -189,14 +190,75 @@ function toggleProductList(id) {
 function switchToManagingProductList() {
     window.location.href = "../product_list/product_list.html";
 }
+
+async function sendRequest(url, queryType, data)
+{
+    try {
+        const res = await fetch(API + url, {
+            method: queryType, 
+            headers: {"content-type": "application/json"}, 
+            body: JSON.stringify(data)
+        });
+        
+        if(res.ok)
+        {
+            return res;
+        }
+        else
+        {
+            //notify(notificationErrorText, NotificationTypes["error"]);
+            return false;
+        }
+
+    } catch (err) {
+        console.log(err);
+        //notify("Server is dead.", NotificationTypes["error"]);
+        return false;
+    }
+}
+
+function getCategoryNames(products) {
+    return [...new Set(products.map(product => product.categoryName))];
+}
+
+function getCategoryNamesToProducts(categoryNames, allProducts) {
+    let res = {};
+    categoryNames.forEach(categoryName => {
+        const productsOfCategory = allProducts
+            .filter(product => product.categoryName === categoryName);
+        res[categoryName] = productsOfCategory;
+    });
+
+    return res;
+}
+
+async function refreshAllProductsData() {
+    const res = await sendRequest("/products", "GET");
+    if(res) {
+        const data = await res.json();
+        const products = data.map(readProduct);
+        const categoryNames = getCategoryNames(products);
+        const catsToProds = getCategoryNamesToProducts(categoryNames, products);
+        Object.entries(catsToProds)
+            .forEach(([catName, products]) => createCategory(catName, products));
+    } else {
+        console.log("Error request.");
+    }
+}
+
+async function main() {
+    await refreshAllProductsData();
+}
+
+main();
   
 manageGroupsButton.addEventListener("click", switchToManagingProductList);
 
-createCategory("CategoryNEW", [
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-    newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
-])
+// createCategory("CategoryNEW", [
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+//     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),
+// ]);

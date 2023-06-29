@@ -3,6 +3,8 @@ const closeFormButton = document.getElementById("closeFormButton");
 const manageGroupsBtn = document.getElementById("manageGroupsBtn");
 const productTableBody = document.getElementById("productTableBody");
 
+const API = "http://localhost:8000/api";
+
 /*
     <tr>
       <td>Product 1</td>
@@ -55,7 +57,7 @@ function newProduct(productName0, categoryName0, productDescription0,
 function readProduct(product) {
     return {
         productName  : product.product_name,
-        categoryName : product.categoryName,
+        categoryName : product.category_name,
         productDescription : product.product_description,
         productStock : product.in_stock,
         productPrice : product.price,
@@ -105,15 +107,58 @@ function switchToManagingCategories() {
     window.location.href = "../category_list/category_list.html";
 }
 
+async function sendRequest(url, queryType, data)
+{
+    try {
+        const res = await fetch(API + url, {
+            method: queryType, 
+            headers: {"content-type": "application/json"}, 
+            body: JSON.stringify(data)
+        });
+        
+        if(res.ok)
+        {
+            return res;
+        }
+        else
+        {
+            //notify(notificationErrorText, NotificationTypes["error"]);
+            return false;
+        }
+
+    } catch (err) {
+        console.log(err);
+        //notify("Server is dead.", NotificationTypes["error"]);
+        return false;
+    }
+}
+
+async function refreshAllProductsData() {
+    const res = await sendRequest("/products", "GET");
+    if(res) {
+        const data = await res.json();
+        data.map(readProduct).forEach(addProduct);
+        
+    } else {
+        console.log("Error request.");
+    }
+}
+
 form_open_button.addEventListener("click", openForm);
 closeFormButton.addEventListener("click", closeForm);
 manageGroupsBtn.addEventListener("click", switchToManagingCategories);
 
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+async function main() {
+    await refreshAllProductsData();
+}
+
+main();
+
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
+// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
