@@ -35,7 +35,7 @@ public class CreateUserOperation implements StorageOperation {
         } catch (NoSuchElementException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            throw new DataConflictException("Product with name " + params.get("product_name").get() + " already exists!!!");
+            throw new DataConflictException("Product with name " + params.get("username").get() + " already exists!!!");
         }
     }
 }

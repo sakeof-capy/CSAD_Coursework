@@ -16,7 +16,7 @@ public class StandardExecutor implements StorageOperationExecutor {
             if(res.isPresent())
                 HttpUtils.sendResponseOperationResult(exchange, 200, res.get());
             else
-                HttpUtils.sendResponse(exchange, 200);
+                HttpUtils.sendResponse(exchange, 204);
         } catch (NotFoundException e) {
             HttpUtils.sendResponse(exchange, 404, e.getMessage());
         } catch (DataConflictException e) {

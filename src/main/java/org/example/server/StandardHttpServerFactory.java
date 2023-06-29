@@ -29,7 +29,7 @@ public class StandardHttpServerFactory implements TwoParamFactory<Server, Storag
             storageContext.mapEndpointToOperation("GET", "/api/categories", OperationType.READ_CATEGORY);
             storageContext.mapEndpointToOperation("PUT", "/api/category", OperationType.CREATE_CATEGORY);
             storageContext.mapEndpointToOperation("POST", "/api/category/{category_name}", OperationType.UPDATE_CATEGORY);
-            storageContext.mapEndpointToOperation("DELETE", "/api/category/{category_name~}", OperationType.DELETE_CATEGORY);
+            storageContext.mapEndpointToOperation("DELETE", "/api/category/{category_name}", OperationType.DELETE_CATEGORY);
 
             server.addContext("/api", storageContext);
             return server;
