@@ -89,29 +89,19 @@ function createTdWithText(txt) {
     return td;
 }
 
-// function createTdWithUpdateButton() {
-//     const td = document.createElement("td");
-//     td.setAttribute("class", "btn-container");
+function createUpdateButton() {
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-update");
+    button.innerText = "Update";
+    return button;
+}
 
-//     const button = document.createElement("button");
-//     button.setAttribute("class", "btn btn-update");
-//     button.innerText = "Update";
-    
-//     td.appendChild(button);
-//     return td;
-// }
-
-// function createTdWithDeleteButton() {
-//     const td = document.createElement("td");
-//     td.setAttribute("class", "btn-container");
-
-//     const button = document.createElement("button");
-//     button.setAttribute("class", "btn btn-delete");
-//     button.innerText = "Delete";
-    
-//     td.appendChild(button);
-//     return td;
-// }
+function createDeleteButton() {
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-delete");
+    button.innerText = "Delete";
+    return button;
+}
 
 function createTrFromProduct(product) {
     const tr = document.createElement("tr");
@@ -119,14 +109,12 @@ function createTrFromProduct(product) {
     const tdDescription = createTdWithText(product.productDescription);
     const tdPrice = createTdWithText('$' + product.productPrice);
     const tdStock = createTdWithText(product.productStock);
-    // const tdUpdate = createTdWithUpdateButton();
-    // const tdDelete = createTdWithDeleteButton();
     [tdName, tdDescription, tdPrice, tdStock]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
 
-function createProductList(id, categoryName, products) {
+function createProductList(id, categoryName, products, categoryDescription) {
     const div = document.createElement("div");
     div.setAttribute("id", id);
     div.setAttribute("class", "product-list");
@@ -135,6 +123,10 @@ function createProductList(id, categoryName, products) {
     const categoryNameDiv = document.createElement("div");
     categoryNameDiv.setAttribute("class", "category-name");
     categoryNameDiv.innerText = categoryName;
+
+    const categoryDescriptionDiv = document.createElement("div");
+    categoryDescriptionDiv.setAttribute("class", "category-description");
+    categoryDescriptionDiv.innerText = categoryDescription;
 
     const productTable = document.createElement("table");
     productTable.setAttribute("class", "product-table");
@@ -170,12 +162,21 @@ function createProductList(id, categoryName, products) {
     productTable.appendChild(tableHead);
     productTable.appendChild(tableBody);
 
+    //Update Delete buttons
+    const updateButton = createUpdateButton();
+    const deleteButton = createDeleteButton();
+    const buttonContainer = document.createElement("div");
+    buttonContainer.appendChild(updateButton);
+    buttonContainer.appendChild(deleteButton);
+
     div.appendChild(categoryNameDiv);
+    div.appendChild(categoryDescriptionDiv);
     div.appendChild(productTable);
+    div.appendChild(buttonContainer);
     productListContainer.appendChild(div);
 }
 
-function createCategory(name, products) {
+function createCategory(name, products, categoryDescription) {
     const number = productListsCounter++;
     const id = "product-list-" + number;
     const div = document.createElement("div");
@@ -186,7 +187,7 @@ function createCategory(name, products) {
     nameDiv.innerText = name;
     div.appendChild(nameDiv)
     categoryContainer.appendChild(div);
-    createProductList(id, name, products);
+    createProductList(id, name, products, categoryDescription);
 }
 
 function toggleProductList(id) {
@@ -227,16 +228,19 @@ async function sendRequest(url, queryType, data)
 async function getCategories() {
     const res = await sendRequest("/categories", "GET");
     const data = await res.json();
+    console.log("Categories:", data);
     return data.map(readCategory);
-    //return [...new Set(products.map(product => product.categoryName))];
 }
 
-function getCategoryNamesToProducts(categoryNames, allProducts) {
+function getCategoriesToProducts(categories, allProducts) {
     let res = {};
-    categoryNames.forEach(categoryName => {
+    categories.forEach(category => {
+        console.log("one category:", category)
         const productsOfCategory = allProducts
-            .filter(product => product.categoryName === categoryName);
-        res[categoryName] = productsOfCategory;
+            .filter(product => product.categoryName === category.categoryName);
+        res[category.categoryName] = {
+            categoryDescryption: category.categoryDescription, 
+            products: productsOfCategory};
     });
 
     return res;
@@ -248,10 +252,18 @@ async function refreshAllProductsData() {
         const data = await res.json();
         const products = data.map(readProduct);
         const categories = await getCategories();
-        const categoryNames = categories.map(cat => cat.categoryName);
-        const catsToProds = getCategoryNamesToProducts(categoryNames, products);
-        Object.entries(catsToProds)
-            .forEach(([catName, products]) => createCategory(catName, products));
+        const catsToProds = getCategoriesToProducts(categories, products);
+        categories.forEach(category => {
+            const prodsOfCat = products.filter(product => product.categoryName === category.categoryName);
+            console.log("cat:", category.categoryDescription);
+            createCategory(category.categoryName, prodsOfCat, category.categoryDescription);
+        });
+        // console.log("catsToProds", catsToProds);
+        // Object.entries(catsToProds)
+        //     .forEach(([catName, desProds]) => {
+        //         console.log("catName:", catName, "desProds:",desProds);
+        //         createCategory(catName, desProds.products, desProds.categoryDescription);
+        //     });
     } else {
         console.log("Error request.");
     }
