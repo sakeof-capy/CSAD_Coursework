@@ -8,6 +8,8 @@ import org.example.storage.operations.StorageOperation;
 import org.example.utilities.dynobjects.DynamicObject;
 import org.example.utilities.http.HttpUtils;
 
+import java.util.NoSuchElementException;
+
 public class StandardExecutor implements StorageOperationExecutor {
     @Override
     public void executeOperation(StorageOperation operation, DynamicObject params, HttpExchange exchange) {
@@ -17,7 +19,9 @@ public class StandardExecutor implements StorageOperationExecutor {
                 HttpUtils.sendResponseOperationResult(exchange, 200, res.get());
             else
                 HttpUtils.sendResponse(exchange, 204);
-        } catch (NotFoundException e) {
+        } catch (NoSuchElementException e) {
+            HttpUtils.sendResponse(exchange, 400, e.getMessage());
+        }catch (NotFoundException e) {
             HttpUtils.sendResponse(exchange, 404, e.getMessage());
         } catch (DataConflictException e) {
             HttpUtils.sendResponse(exchange, 409, e.getMessage());
