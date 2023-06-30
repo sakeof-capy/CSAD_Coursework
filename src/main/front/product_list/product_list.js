@@ -26,6 +26,21 @@ const producerInputUpdate = document.getElementById("producerInputUpdate");
 const submitUpdateFormButton = document.getElementById("submitUpdateFormButton");
 const closeUpdateFormButton = document.getElementById("closeUpdateFormButton");
 
+//Search form:
+const search_form_popup = document.getElementById("search_form_popup");
+
+const nameInputSearch = document.getElementById("nameInputSearch");
+const categoryInputSearch = document.getElementById("categoryInputSearch");
+const descriptionInputSearch = document.getElementById("descriptionInputSearch");
+const stockInputSearch = document.getElementById("stockInputSearch");
+const priceInputSearch = document.getElementById("priceInputSearch");
+const producerInputSearch = document.getElementById("producerInputSearch");
+
+const submitSearchFormButton = document.getElementById("submitSearchFormButton");
+const closeSearchFormButton = document.getElementById("closeSearchFormButton");
+const search_form_open_button = document.getElementById("search_form_open_button");
+const refresh_search_button = document.getElementById("refresh_search_button");
+
 const notification = document.getElementById("notification");
 
 const API = "http://localhost:8000/api";
@@ -159,6 +174,25 @@ function clearUpdateFormFields() {
     producerInputUpdate.value = "";
 }
 
+function clearSearchFormFields() {
+    nameInputSearch.value = "";
+    categoryInputSearch.value = "";
+    descriptionInputSearch.value = "";
+    stockInputSearch.value = "";
+    priceInputSearch.value = "";
+    producerInputSearch.value = "";
+}
+
+function openSearchForm() {
+    clearSearchFormFields();
+    search_form_popup.style.display = "block";
+}
+
+function closeSearchForm() {
+    search_form_popup.style.display = "none";
+    clearSearchFormFields();
+}
+
 function openForm() {
     clearCreateFormFields();
     form_popup.style.display = "block";
@@ -190,14 +224,30 @@ function closeUpdateForm() {
     clearUpdateFormFields();
 }
 
+async function sendSearchingProduct() {
+    const res = await sendRequest("/products", "POST", 
+    newProduct(nameInputSearch.value,
+        categoryInputSearch.value, descriptionInputSearch.value, stockInputSearch.value,
+        priceInputSearch.value, producerInputSearch.value), "Invalid input!");
+    return res;
+}
+
+async function onSearchFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendSearchingProduct();
+    if(res) {
+        const data = await res.json();
+        clearAllProductsViewed();
+        data.map(readProduct).forEach(addProduct);
+        closeSearchForm();
+    }
+}
+
 async function sendUpdatingProduct(productName) {
     const res = await sendRequest("/product?product_name=" + productName, "POST", 
     newProduct(nameInputUpdate.value,
         categoryInputUpdate.value, descriptionInputUpdate.value, stockInputUpdate.value,
         priceInputUpdate.value, producerInputUpdate.value), "Invalid input!");
-    console.log(newProduct(nameInputUpdate.value,
-        categoryInputUpdate.value, descriptionInputUpdate.value, stockInputUpdate.value,
-        priceInputUpdate.value, producerInputUpdate.value));
     return res;
 }
 
@@ -305,6 +355,11 @@ async function main() {
     submitCreateFormButton.addEventListener("click", onFormSubmitted);
     submitUpdateFormButton.addEventListener("click", onUpdateFormSubmitted);
     manageGroupsBtn.addEventListener("click", switchToManagingCategories);
+    search_form_open_button.addEventListener("click", openSearchForm);
+    submitSearchFormButton.addEventListener("click", onSearchFormSubmitted);
+    closeSearchFormButton.addEventListener("click", closeSearchForm);
+    refresh_search_button.addEventListener("click", refreshAllProductsData);
 }
 
 main();
+

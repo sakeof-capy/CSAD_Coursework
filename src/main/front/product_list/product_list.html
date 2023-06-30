@@ -103,11 +103,35 @@
       position: fixed;
       background-color: #4CAF50;
       bottom: 20px; 
-      right: 10px; 
+      right: 20px; 
       z-index: 999; 
     }
 
     #form_open_button:hover {
+        background-color: #353835;
+    }
+
+    #search_form_open_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; 
+      right: 70px; 
+      z-index: 999; 
+    }
+
+    #search_form_open_button:hover {
+        background-color: #353835;
+    }
+
+    #refresh_search_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; 
+      right: 150px; 
+      z-index: 999; 
+    }
+
+    #refresh_search_button:hover {
         background-color: #353835;
     }
 
@@ -207,6 +231,8 @@
 </head>
 <body>
   <button id="form_open_button" type="button" class="btn btn-primary">+</button>
+  <button id="search_form_open_button" type="button" class="btn btn-primary">Search</button>
+  <button id="refresh_search_button" type="button" class="btn btn-primary">Refresh</button>
   <table>
     <thead>
       <tr>
@@ -261,6 +287,34 @@
     </div>
   </div>
 
+  <div id="search_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Search Product</h2>
+      <form id="searchForm">
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputSearch" name="name">
+
+        <label for="category">Category:</label>
+        <input type="text" id="categoryInputSearch" name="category">
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputSearch" name="description"></textarea>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stockInputSearch" pattern="^\d+$" title="integer value" name="stock">
+
+        <label for="price">Price:</label>
+        <input type="text" id="priceInputSearch" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price">
+
+        <label for="producer">Producer:</label>
+        <input type="text" id="producerInputSearch" name="producer">
+
+        <button type="submit" id="submitSearchFormButton" class="btn btn-primary">Search</button>
+        <button id="closeSearchFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
   <div id="update_form_popup" class="form-popup">
     <div class="form-container">
       <h2>Update Product</h2>
@@ -288,6 +342,8 @@
       </form>
     </div>
   </div>
+
+  
 
   <div class="manage-groups-container">
     <button id="manageGroupsBtn" class="manage-groups-button">Manage Groups</button>
