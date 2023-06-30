@@ -236,7 +236,6 @@
   <table>
     <thead>
       <tr>
-        <th></th>
         <th>Name</th>
         <th>Category</th>
         <th>Description</th>
@@ -244,6 +243,7 @@
         <th class="align-right">Price</th>
         <th class="align-right">General Price</th>
         <th class="align-right">Producer</th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
@@ -285,6 +285,17 @@
 
         <button type="submit" id="submitCreateFormButton" class="btn btn-primary">Add</button>
         <button id="closeFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+  <div id="plus_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Add</h2>
+      <form id="plusForm">
+        <input type="text" id="plusInput" name="name" required>
+
+        <button type="submit" id="submitPlusFormButton" class="btn btn-primary">Add</button>
+        <button id="closePlusButton" type="button" class="btn btn-delete">Cancel</button>
       </form>
     </div>
   </div>

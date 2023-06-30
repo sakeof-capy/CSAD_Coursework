@@ -41,6 +41,12 @@ const closeSearchFormButton = document.getElementById("closeSearchFormButton");
 const search_form_open_button = document.getElementById("search_form_open_button");
 const refresh_search_button = document.getElementById("refresh_search_button");
 
+//Plus form:
+const plus_form_popup = document.getElementById("plus_form_popup");
+const plusInput = document.getElementById("plusInput");
+const submitPlusFormButton = document.getElementById("submitPlusFormButton");
+const closePlusButton = document.getElementById("closePlusButton");
+
 const notification = document.getElementById("notification");
 
 const API = "http://localhost:8000/api";
@@ -95,7 +101,10 @@ function createTrFromProduct(product) {
     const tdDelete = createTdWithDeleteButton();
     const tdPlus = createTdWithPlusButton();
     const tdMinus = createTdWithMinusButton();
-    [tdPlus, tdMinus,tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer, tdUpdate, tdDelete]
+    const tdPlusMinus = document.createElement("td");
+    tdPlusMinus.appendChild(tdPlus);
+    tdPlusMinus.appendChild(tdMinus);
+    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer,tdPlusMinus, tdUpdate, tdDelete]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
@@ -148,29 +157,31 @@ function createTdWithUpdateButton() {
 }
 
 function createTdWithPlusButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
+    //const td = document.createElement("td");
+    //td.setAttribute("class", "btn-container");
 
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "+";
-    // button.addEventListener("click", openUpdateForm);
+    button.addEventListener("click", openPlusForm);
     
-    td.appendChild(button);
-    return td;
+    //td.appendChild(button);
+    //return td;
+    return button;
 }
 
 function createTdWithMinusButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
+    //const td = document.createElement("td");
+    //td.setAttribute("class", "btn-container");
 
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-delete");
     button.innerText = "-";
     // button.addEventListener("click", openUpdateForm);
     
-    td.appendChild(button);
-    return td;
+    //td.appendChild(button);
+    //return td;
+    return button;
 }
 
 function createTdWithDeleteButton() {
@@ -213,6 +224,20 @@ function clearSearchFormFields() {
     producerInputSearch.value = "";
 }
 
+function clear_plus_fields() {
+    plusInput.value = "";
+}
+
+function openPlusForm() {
+    clear_plus_fields();
+    plus_form_popup.style.display = "block";
+}
+
+function closePlusForm() {
+    plus_form_popup.style.display = "none";
+    clear_plus_fields();
+}
+
 function openSearchForm() {
     clearSearchFormFields();
     search_form_popup.style.display = "block";
@@ -252,6 +277,10 @@ function openUpdateForm(event) {
 function closeUpdateForm() {
     update_form_popup.style.display = "none";
     clearUpdateFormFields();
+}
+
+async function onPlusFormSubmitted(event) {
+    const button = event.target
 }
 
 async function sendSearchingProduct() {
@@ -389,6 +418,8 @@ async function main() {
     submitSearchFormButton.addEventListener("click", onSearchFormSubmitted);
     closeSearchFormButton.addEventListener("click", closeSearchForm);
     refresh_search_button.addEventListener("click", refreshAllProductsData);
+    closePlusButton.addEventListener("click", closePlusForm);
+    submitPlusFormButton.addEventListener("click", onPlusFormSubmitted);
 }
 
 main();
