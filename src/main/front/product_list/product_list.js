@@ -46,6 +46,11 @@ const plus_form_popup = document.getElementById("plus_form_popup");
 const plusInput = document.getElementById("plusInput");
 const submitPlusFormButton = document.getElementById("submitPlusFormButton");
 const closePlusButton = document.getElementById("closePlusButton");
+//Minus form:
+const plus_form_popup2 = document.getElementById("plus_form_popup2");
+const plusInput2 = document.getElementById("plusInput2");
+const submitPlusFormButton2 = document.getElementById("submitPlusFormButton2");
+const closePlusButton2 = document.getElementById("closePlusButton2");
 
 const notification = document.getElementById("notification");
 
@@ -157,30 +162,18 @@ function createTdWithUpdateButton() {
 }
 
 function createTdWithPlusButton() {
-    //const td = document.createElement("td");
-    //td.setAttribute("class", "btn-container");
-
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "+";
     button.addEventListener("click", openPlusForm);
-    
-    //td.appendChild(button);
-    //return td;
     return button;
 }
 
 function createTdWithMinusButton() {
-    //const td = document.createElement("td");
-    //td.setAttribute("class", "btn-container");
-
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-delete");
     button.innerText = "-";
-    // button.addEventListener("click", openUpdateForm);
-    
-    //td.appendChild(button);
-    //return td;
+    button.addEventListener("click", openMinusForm);
     return button;
 }
 
@@ -228,6 +221,10 @@ function clear_plus_fields() {
     plusInput.value = "";
 }
 
+function clear_minus_fields() {
+    plusInput2.value = "";
+}
+
 function openPlusForm(event) {
     const button = event.target;
     const row = button.closest("tr");
@@ -241,6 +238,22 @@ function openPlusForm(event) {
 
 function closePlusForm() {
     plus_form_popup.style.display = "none";
+    clear_plus_fields();
+}
+
+function openMinusForm(event) {
+    const button = event.target;
+    const row = button.closest("tr");
+    const cells = row.children;
+    currentPlussingProduct = newProduct(cells[0].textContent, 
+        cells[1].textContent, cells[2].textContent, cells[3].textContent, 
+        cells[4].textContent.substring(1), cells[6].textContent);
+    clear_plus_fields();
+    plus_form_popup2.style.display = "block";
+}
+
+function closeMinusForm() {
+    plus_form_popup2.style.display = "none";
     clear_plus_fields();
 }
 
@@ -285,6 +298,27 @@ function closeUpdateForm() {
     clearUpdateFormFields();
 }
 
+async function sendMinus() {
+    const newVal = parseInt(currentPlussingProduct.in_stock) - parseInt(plusInput2.value);
+    currentPlussingProduct.in_stock = newVal;
+    const res = await sendRequest("/product?product_name=" + currentPlussingProduct.product_name, 
+        "POST", currentPlussingProduct);
+    return res;
+}
+
+
+async function onMinusFormSubmitted(event) {
+    event.preventDefault();
+    if(parseInt(plusInput2.value) > 0) {
+        const res = await sendMinus();
+        if(res) {
+            closeMinusForm();
+            refreshAllProductsData();
+        }
+    } else {
+        notify("Invalid input!");
+    }
+}
 async function sendPlus() {
     const newVal = parseInt(currentPlussingProduct.in_stock) + parseInt(plusInput.value);
     currentPlussingProduct.in_stock = newVal;
@@ -391,7 +425,7 @@ async function sendRequest(url, queryType, data, errorText)
         }
         else
         {
-            notify(errorText ? errorText : "Error occured!");
+            notify(errorText ? errorText : "Invalid input!");
             return false;
         }
 
@@ -445,7 +479,9 @@ async function main() {
     closeSearchFormButton.addEventListener("click", closeSearchForm);
     refresh_search_button.addEventListener("click", refreshAllProductsData);
     closePlusButton.addEventListener("click", closePlusForm);
+    closePlusButton2.addEventListener("click", closeMinusForm);
     submitPlusFormButton.addEventListener("click", onPlusFormSubmitted);
+    submitPlusFormButton2.addEventListener("click", onMinusFormSubmitted);
 }
 
 main();
