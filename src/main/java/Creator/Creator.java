@@ -26,7 +26,7 @@ public class Creator {
         //add product
         db.add_product(conn, "Apple", "Fruits", "", 100, 50, "Ukraine");
         db.add_product(conn, "Pineapple", "Fruits", "", 25, 55, "Ukraine");
-        db.add_product(conn, "Carrot", "Vegetables", "", 60, 30, "Unite Kingdom");
+        db.add_product(conn, "Carrot", "Vegetables", "", 60, 30, "United Kingdom");
         db.add_product(conn, "Beet", "Vegetables", "", 20, 78, "Turkey");
         db.add_product(conn, "Potato", "Vegetables", "", 500, 65, "Poland");
     }
