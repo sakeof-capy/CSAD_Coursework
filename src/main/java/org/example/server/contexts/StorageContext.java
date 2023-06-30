@@ -25,11 +25,7 @@ public class StorageContext implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) {
-            System.out.println(exchange.getRequestURI() + " " + exchange.getRequestMethod());
-//        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
-//            HttpUtils.writeOptions(exchange);
-//            return;
-//        }
+        System.out.println(exchange.getRequestURI() + " " + exchange.getRequestMethod());
         try {
             final var requestMethod = exchange.getRequestMethod();
             final var uri = exchange.getRequestURI();
@@ -40,7 +36,7 @@ public class StorageContext implements HttpHandler {
                     .orElse(new StandardDynamicObject());
             operationExecutor.executeOperation(operation, params, exchange);
         } catch (IllegalArgumentException e) {
-            System.out.println("Endpoint not found.");
+            System.out.println("Endpoint not found: " + e.getMessage());
             HttpUtils.sendResponse(exchange, 404);
         } catch (CreationException e) {
             e.printStackTrace();

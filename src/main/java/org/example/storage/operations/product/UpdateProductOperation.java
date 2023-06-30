@@ -1,6 +1,7 @@
 package org.example.storage.operations.product;
 
 import org.example.exceptions.storage.DataConflictException;
+import org.example.exceptions.storage.InvalidParamSetException;
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.Storage;
 import org.example.storage.operations.StorageOperation;
@@ -38,7 +39,7 @@ public class UpdateProductOperation implements StorageOperation {
 
             return Optional.empty();
         } catch (NoSuchElementException e) {
-            throw new RuntimeException(e);
+            throw new InvalidParamSetException(e.getMessage());
         } catch (SQLException e) {
             throw new DataConflictException("No such product found!!!");
         }

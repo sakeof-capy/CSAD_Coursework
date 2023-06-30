@@ -1,9 +1,79 @@
 const form_open_button = document.getElementById("form_open_button");
-const closeFormButton = document.getElementById("closeFormButton");
 const manageGroupsBtn = document.getElementById("manageGroupsBtn");
 const productTableBody = document.getElementById("productTableBody");
+const form_popup = document.getElementById("form_popup");
+const update_form_popup = document.getElementById("update_form_popup");
+
+//Create form:
+const nameInputCreate = document.getElementById("nameInputCreate");
+const categoryInputCreate = document.getElementById("categoryInputCreate");
+const descriptionInputCreate = document.getElementById("descriptionInputCreate");
+const stockInputCreate = document.getElementById("stockInputCreate");
+const priceInputCreate = document.getElementById("priceInputCreate");
+const producerInputCreate = document.getElementById("producerInputCreate");
+
+const submitCreateFormButton = document.getElementById("submitCreateFormButton");
+const closeFormButton = document.getElementById("closeFormButton");
+
+//Update form:
+const nameInputUpdate = document.getElementById("nameInputUpdate");
+const categoryInputUpdate = document.getElementById("categoryInputUpdate");
+const descriptionInputUpdate = document.getElementById("descriptionInputUpdate");
+const stockInputUpdate = document.getElementById("stockInputUpdate");
+const priceInputUpdate = document.getElementById("priceInputUpdate");
+const producerInputUpdate = document.getElementById("producerInputUpdate");
+
+const submitUpdateFormButton = document.getElementById("submitUpdateFormButton");
+const closeUpdateFormButton = document.getElementById("closeUpdateFormButton");
+
+//Search form:
+const search_form_popup = document.getElementById("search_form_popup");
+
+const nameInputSearch = document.getElementById("nameInputSearch");
+const categoryInputSearch = document.getElementById("categoryInputSearch");
+const descriptionInputSearch = document.getElementById("descriptionInputSearch");
+const stockInputSearch = document.getElementById("stockInputSearch");
+const priceInputSearch = document.getElementById("priceInputSearch");
+const producerInputSearch = document.getElementById("producerInputSearch");
+
+const submitSearchFormButton = document.getElementById("submitSearchFormButton");
+const closeSearchFormButton = document.getElementById("closeSearchFormButton");
+const search_form_open_button = document.getElementById("search_form_open_button");
+const refresh_search_button = document.getElementById("refresh_search_button");
+
+//Plus form:
+const plus_form_popup = document.getElementById("plus_form_popup");
+const plusInput = document.getElementById("plusInput");
+const submitPlusFormButton = document.getElementById("submitPlusFormButton");
+const closePlusButton = document.getElementById("closePlusButton");
+//Minus form:
+const plus_form_popup2 = document.getElementById("plus_form_popup2");
+const plusInput2 = document.getElementById("plusInput2");
+const submitPlusFormButton2 = document.getElementById("submitPlusFormButton2");
+const closePlusButton2 = document.getElementById("closePlusButton2");
+
+const notification = document.getElementById("notification");
 
 const API = "http://localhost:8000/api";
+const notification_time = 1300;
+
+function hide(elem) {
+    elem.style.display = "none";
+}
+
+function show(elem) {
+    elem.style.display = "flex";
+}
+
+function notify(text)
+{
+    notification.innerText = text;
+    show(notification);
+    const tm = setTimeout(() => {
+        hide(notification);
+        clearTimeout(tm);
+    }, notification_time);
+}
 
 /*
     <tr>
@@ -21,6 +91,7 @@ const API = "http://localhost:8000/api";
 let productsCounter = 0;
 
 function createTrFromProduct(product) {
+    const generalPrice = product.productPrice * product.productStock;
     const tr = document.createElement("tr");
     const trId = "product-id-" + (productsCounter++);
     tr.setAttribute("id", trId);
@@ -29,10 +100,16 @@ function createTrFromProduct(product) {
     const tdDescription = createTdWithText(product.productDescription);
     const tdStock = createTdWithText(product.productStock);
     const tdPrice = createTdWithText('$' + product.productPrice);
+    const tdGenPrice = createTdWithText('$' + generalPrice.toFixed(2));
     const tdProducer = createTdWithText(product.productProducer);
     const tdUpdate = createTdWithUpdateButton();
     const tdDelete = createTdWithDeleteButton();
-    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdProducer, tdUpdate, tdDelete]
+    const tdPlus = createTdWithPlusButton();
+    const tdMinus = createTdWithMinusButton();
+    const tdPlusMinus = document.createElement("td");
+    tdPlusMinus.appendChild(tdPlus);
+    tdPlusMinus.appendChild(tdMinus);
+    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer,tdPlusMinus, tdUpdate, tdDelete]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
@@ -45,12 +122,12 @@ function addProduct(product) {
 function newProduct(productName0, categoryName0, productDescription0, 
     productStock0, productPrice0, productProducer0) {
         return {
-            productName : productName0,
-            categoryName : categoryName0,
-            productDescription : productDescription0,
-            productStock : productStock0,
-            productPrice : productPrice0,
-            productProducer : productProducer0,
+            product_name : productName0,
+            category_name : categoryName0,
+            product_description : productDescription0,
+            in_stock : productStock0,
+            price : productPrice0,
+            producer : productProducer0,
         };
     }
 
@@ -78,9 +155,26 @@ function createTdWithUpdateButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "Update";
+    button.addEventListener("click", openUpdateForm);
     
     td.appendChild(button);
     return td;
+}
+
+function createTdWithPlusButton() {
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-update");
+    button.innerText = "+";
+    button.addEventListener("click", openPlusForm);
+    return button;
+}
+
+function createTdWithMinusButton() {
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-delete");
+    button.innerText = "-";
+    button.addEventListener("click", openMinusForm);
+    return button;
 }
 
 function createTdWithDeleteButton() {
@@ -90,26 +184,235 @@ function createTdWithDeleteButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-delete");
     button.innerText = "Delete";
+    button.addEventListener("click", deleteButtonEventListener);
     
     td.appendChild(button);
     return td;
 }
 
+function clearCreateFormFields() {
+    nameInputCreate.value = "";
+    categoryInputCreate.value = "";
+    descriptionInputCreate.value = "";
+    stockInputCreate.value = "";
+    priceInputCreate.value = "";
+    producerInputCreate.value = "";
+}
+
+function clearUpdateFormFields() {
+    nameInputUpdate.value = "";
+    categoryInputUpdate.value = "";
+    descriptionInputUpdate.value = "";
+    stockInputUpdate.value = "";
+    priceInputUpdate.value = "";
+    producerInputUpdate.value = "";
+}
+
+function clearSearchFormFields() {
+    nameInputSearch.value = "";
+    categoryInputSearch.value = "";
+    descriptionInputSearch.value = "";
+    stockInputSearch.value = "";
+    priceInputSearch.value = "";
+    producerInputSearch.value = "";
+}
+
+function clear_plus_fields() {
+    plusInput.value = "";
+}
+
+function clear_minus_fields() {
+    plusInput2.value = "";
+}
+
+function openPlusForm(event) {
+    const button = event.target;
+    const row = button.closest("tr");
+    const cells = row.children;
+    currentPlussingProduct = newProduct(cells[0].textContent, 
+        cells[1].textContent, cells[2].textContent, cells[3].textContent, 
+        cells[4].textContent.substring(1), cells[6].textContent);
+    clear_plus_fields();
+    plus_form_popup.style.display = "block";
+}
+
+function closePlusForm() {
+    plus_form_popup.style.display = "none";
+    clear_plus_fields();
+}
+
+function openMinusForm(event) {
+    const button = event.target;
+    const row = button.closest("tr");
+    const cells = row.children;
+    currentPlussingProduct = newProduct(cells[0].textContent, 
+        cells[1].textContent, cells[2].textContent, cells[3].textContent, 
+        cells[4].textContent.substring(1), cells[6].textContent);
+    clear_plus_fields();
+    plus_form_popup2.style.display = "block";
+}
+
+function closeMinusForm() {
+    plus_form_popup2.style.display = "none";
+    clear_plus_fields();
+}
+
+function openSearchForm() {
+    clearSearchFormFields();
+    search_form_popup.style.display = "block";
+}
+
+function closeSearchForm() {
+    search_form_popup.style.display = "none";
+    clearSearchFormFields();
+}
+
 function openForm() {
-    document.getElementById("form_popup").style.display = "block";
+    clearCreateFormFields();
+    form_popup.style.display = "block";
 }
 
 function closeForm() {
-    document.getElementById("form_popup").style.display = "none";
+    form_popup.style.display = "none";
+    clearCreateFormFields();
+}
+
+function openUpdateForm(event) {
+    const button = event.target;
+    const row = button.closest('tr');
+    const productName = row.querySelector('td:first-child').textContent;
+    nameOfProductBeingUpdated = productName;
+    const cells = row.children;
+    nameInputUpdate.value = cells[0].textContent;
+    categoryInputUpdate.value = cells[1].textContent;
+    descriptionInputUpdate.value = cells[2].textContent;
+    stockInputUpdate.value = cells[3].textContent;
+    priceInputUpdate.value = cells[4].textContent.substring(1);
+    producerInputUpdate.value = cells[5].textContent;
+    
+    update_form_popup.style.display = "block";
+}
+
+function closeUpdateForm() {
+    update_form_popup.style.display = "none";
+    clearUpdateFormFields();
+}
+
+async function sendMinus() {
+    const newVal = parseInt(currentPlussingProduct.in_stock) - parseInt(plusInput2.value);
+    currentPlussingProduct.in_stock = newVal;
+    const res = await sendRequest("/product?product_name=" + currentPlussingProduct.product_name, 
+        "POST", currentPlussingProduct);
+    return res;
+}
+
+
+async function onMinusFormSubmitted(event) {
+    event.preventDefault();
+    if(parseInt(plusInput2.value) > 0) {
+        const res = await sendMinus();
+        if(res) {
+            closeMinusForm();
+            refreshAllProductsData();
+        }
+    } else {
+        notify("Invalid input!");
+    }
+}
+async function sendPlus() {
+    const newVal = parseInt(currentPlussingProduct.in_stock) + parseInt(plusInput.value);
+    currentPlussingProduct.in_stock = newVal;
+    console.log("New prod:", currentPlussingProduct);
+    const res = await sendRequest("/product?product_name=" + currentPlussingProduct.product_name, 
+        "POST", currentPlussingProduct);
+    return res;
+}
+
+let currentPlussingProduct = undefined;
+
+async function onPlusFormSubmitted(event) {
+    event.preventDefault();
+    if(parseInt(plusInput.value) > 0) {
+        const res = await sendPlus();
+        if(res) {
+            closePlusForm();
+            refreshAllProductsData();
+        }
+    } else {
+        notify("Invalid input!");
+    }
+}
+
+async function sendSearchingProduct() {
+    const res = await sendRequest("/products", "POST", 
+    newProduct(nameInputSearch.value,
+        categoryInputSearch.value, descriptionInputSearch.value, stockInputSearch.value,
+        priceInputSearch.value, producerInputSearch.value), "Invalid input!");
+    return res;
+}
+
+async function onSearchFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendSearchingProduct();
+    if(res) {
+        const data = await res.json();
+        clearAllProductsViewed();
+        data.map(readProduct).forEach(addProduct);
+        closeSearchForm();
+    }
+}
+
+async function sendUpdatingProduct(productName) {
+    const res = await sendRequest("/product?product_name=" + productName, "POST", 
+    newProduct(nameInputUpdate.value,
+        categoryInputUpdate.value, descriptionInputUpdate.value, stockInputUpdate.value,
+        priceInputUpdate.value, producerInputUpdate.value), "Invalid input!");
+    return res;
+}
+
+let nameOfProductBeingUpdated = undefined;
+
+async function onUpdateFormSubmitted(event) {
+    event.preventDefault();
+    console.log("Product to be updated:", nameOfProductBeingUpdated);
+    const res = await sendUpdatingProduct(nameOfProductBeingUpdated);
+    await refreshAllProductsData();
+    console.log("Updation res:", res);
+    if(res) {
+        closeUpdateForm();
+        clearUpdateFormFields();
+    }
+}
+
+async function sendCreatingProduct() {
+    const res = await sendRequest("/product", "PUT", newProduct(nameInputCreate.value,
+        categoryInputCreate.value, descriptionInputCreate.value, stockInputCreate.value,
+        priceInputCreate.value, producerInputCreate.value), "Invalid input!");
+    console.log(newProduct(nameInputCreate.value,
+        categoryInputCreate.value, descriptionInputCreate.value, stockInputCreate.value,
+        priceInputCreate.value, producerInputCreate.value));
+    return res;
+}
+
+async function onFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendCreatingProduct();
+    await refreshAllProductsData();
+    console.log("Creation res:", res);
+    if(res) {
+        closeForm();
+        clearCreateFormFields();
+    }
 }
 
 function switchToManagingCategories() {
     window.location.href = "../category_list/category_list.html";
 }
 
-async function sendRequest(url, queryType, data)
+async function sendRequest(url, queryType, data, errorText)
 {
     try {
+        console.log("URL:", API + url);
         const res = await fetch(API + url, {
             method: queryType, 
             headers: {"content-type": "application/json"}, 
@@ -122,13 +425,12 @@ async function sendRequest(url, queryType, data)
         }
         else
         {
-            //notify(notificationErrorText, NotificationTypes["error"]);
+            notify(errorText ? errorText : "Invalid input!");
             return false;
         }
 
     } catch (err) {
-        console.log(err);
-        //notify("Server is dead.", NotificationTypes["error"]);
+        notify(err.message);
         return false;
     }
 }
@@ -137,6 +439,7 @@ async function refreshAllProductsData() {
     const res = await sendRequest("/products", "GET");
     if(res) {
         const data = await res.json();
+        clearAllProductsViewed();
         data.map(readProduct).forEach(addProduct);
         
     } else {
@@ -144,21 +447,42 @@ async function refreshAllProductsData() {
     }
 }
 
-form_open_button.addEventListener("click", openForm);
-closeFormButton.addEventListener("click", closeForm);
-manageGroupsBtn.addEventListener("click", switchToManagingCategories);
+async function deleteProductWithName(name) {
+    const res = await sendRequest("/product?product_name=" + name, "DELETE");
+    if(!res) console.log("Server error deleting the good: " + name);
+    refreshAllProductsData();
+}
+
+async function deleteButtonEventListener(event) {
+    const button = event.target;
+    const rowToDelete = button.closest('tr');
+    const productName = rowToDelete.querySelector('td:first-child').textContent;
+    deleteProductWithName(productName);
+}
+
+function clearAllProductsViewed() {
+    while (productTableBody.firstChild) {
+        productTableBody.removeChild(productTableBody.firstChild);
+    }
+}
 
 async function main() {
     await refreshAllProductsData();
+    form_open_button.addEventListener("click", openForm);
+    closeFormButton.addEventListener("click", closeForm);
+    closeUpdateFormButton.addEventListener("click", closeUpdateForm);
+    submitCreateFormButton.addEventListener("click", onFormSubmitted);
+    submitUpdateFormButton.addEventListener("click", onUpdateFormSubmitted);
+    manageGroupsBtn.addEventListener("click", switchToManagingCategories);
+    search_form_open_button.addEventListener("click", openSearchForm);
+    submitSearchFormButton.addEventListener("click", onSearchFormSubmitted);
+    closeSearchFormButton.addEventListener("click", closeSearchForm);
+    refresh_search_button.addEventListener("click", refreshAllProductsData);
+    closePlusButton.addEventListener("click", closePlusForm);
+    closePlusButton2.addEventListener("click", closeMinusForm);
+    submitPlusFormButton.addEventListener("click", onPlusFormSubmitted);
+    submitPlusFormButton2.addEventListener("click", onMinusFormSubmitted);
 }
 
 main();
 
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));
-// addProduct(newProduct("GogiProduct", "NewSanzharyDevs", "Description", 132, 32.4, "The Gogi"));

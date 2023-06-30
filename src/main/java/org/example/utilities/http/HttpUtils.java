@@ -132,7 +132,7 @@ public class HttpUtils {
 
     public static void sendResponseObject(HttpExchange exchange, int code, Object obj) {
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "content-type");
         exchange.getResponseHeaders().add("Content-Type", "application/json");
 

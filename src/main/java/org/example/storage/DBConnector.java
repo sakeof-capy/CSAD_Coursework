@@ -13,16 +13,16 @@ public class DBConnector implements Storage {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+ dbname, user, pass);
             if (conn != null){
-                System.out.println("Connected");
+                System.out.println("Connected to DB.");
             } else {
-                System.out.println("Failed");
+                System.out.println("Failed to connect to db.");
             }
         } catch (Exception e) {
             throw new StorageException(e.getMessage());
         }
 
     }
-    @Override
+
     public synchronized void executeUpdate(String sql) throws SQLException {
         Statement statement = null;
         statement = conn.createStatement();
@@ -36,11 +36,11 @@ public class DBConnector implements Storage {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet;
-
     }
 
-        @Override
+    @Override
     public void close() throws Exception {
         conn.close();
+        System.out.println("Disconnected from DB.");
     }
 }

@@ -44,8 +44,88 @@ const manageGroupsButton = document.getElementById("manageGroupsButton");
 const categoryContainer = document.getElementById("categoryContainer");
 const productListContainer = document.getElementById("productListContainer");
 
+//Create form:
+const form_open_button = document.getElementById("form_open_button");
+const form_popup = document.getElementById("form_popup");
+
+const nameInputCreate = document.getElementById("nameInputCreate");
+const descriptionInputCreate = document.getElementById("descriptionInputCreate");
+
+const submitCreateFormButton = document.getElementById("submitCreateFormButton");
+const closeFormButton = document.getElementById("closeFormButton");
+
+//Update form:
+const update_form_popup = document.getElementById("update_form_popup");
+
+const nameInputUpdate = document.getElementById("nameInputUpdate");
+const descriptionInputUpdate = document.getElementById("descriptionInputUpdate");
+
+const submitUpdateFormButton = document.getElementById("submitUpdateFormButton");
+const closeUpdateFormButton = document.getElementById("closeUpdateFormButton");
+
 const API = "http://localhost:8000/api";
 let productListsCounter = 0;
+
+
+function clearCreateFormFields() {
+    nameInputCreate.value = "";
+    descriptionInputCreate.value = "";
+}
+
+function openForm() {
+    clearCreateFormFields();
+    form_popup.style.display = "block";
+}
+
+function closeForm() {
+    form_popup.style.display = "none";
+    clearCreateFormFields();
+}
+
+let nameOfCategoryBeingUpdated = undefined;
+
+function openUpdateForm(event) {
+    const button = event.target;
+    const productList = button.parentNode.parentNode;
+    const categoryName = productList.getElementsByClassName("category-name")[0].textContent;
+    const categoryDescription = productList.getElementsByClassName("category-description")[0].textContent;
+    nameOfProductBeingUpdated = categoryName;
+    
+    nameInputUpdate.value = categoryName;
+    descriptionInputUpdate.value = categoryDescription;
+    
+    update_form_popup.style.display = "block";
+}
+
+function closeUpdateForm() {
+    update_form_popup.style.display = "none";
+    clearUpdateFormFields();
+}
+
+function clearUpdateFormFields() {
+    nameInputUpdate.value = "";
+    descriptionInputUpdate.value = "";
+}
+
+async function sendUpdatingProduct(categoryName, newDescr) {
+    console.log("Descr:", newDescr);
+    const res = await sendRequest("/category?category_name=" + categoryName, "POST", 
+    newCategory(nameInputCreate.value, newDescr), "Invalid input!");
+    return res;
+}
+
+let nameOfProductBeingUpdated = undefined;
+
+async function onUpdateFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendUpdatingProduct(nameOfProductBeingUpdated, descriptionInputUpdate.value);
+    console.log("Request res: ", res);
+    await refreshAllProductsData();
+    if(res) {
+        closeUpdateForm();
+        clearUpdateFormFields();
+    }
+}
 
 function newProduct(productName0, categoryName0, productDescription0, 
     productStock0, productPrice0, productProducer0) {
@@ -59,6 +139,13 @@ function newProduct(productName0, categoryName0, productDescription0,
         };
     }
 
+function newCategory(categoryName, categoryDescryption) {
+    return {
+        category_name : categoryName,
+        category_description : categoryDescryption,
+    };
+}
+
 function readProduct(product) {
     return {
         productName  : product.product_name,
@@ -67,6 +154,13 @@ function readProduct(product) {
         productStock : product.in_stock,
         productPrice : product.price,
         productProducer : product.producer,
+    };
+}
+
+function readCategory(cat) {
+    return {
+        categoryName : cat.category_name,
+        categoryDescription : cat.category_description
     };
 }
 
@@ -82,28 +176,20 @@ function createTdWithText(txt) {
     return td;
 }
 
-function createTdWithUpdateButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
-
+function createUpdateButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "Update";
-    
-    td.appendChild(button);
-    return td;
+    button.addEventListener("click", openUpdateForm);
+    return button;
 }
 
-function createTdWithDeleteButton() {
-    const td = document.createElement("td");
-    td.setAttribute("class", "btn-container");
-
+function createDeleteButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-delete");
     button.innerText = "Delete";
-    
-    td.appendChild(button);
-    return td;
+    button.addEventListener("click", onCategoryDelete);
+    return button;
 }
 
 function createTrFromProduct(product) {
@@ -112,14 +198,15 @@ function createTrFromProduct(product) {
     const tdDescription = createTdWithText(product.productDescription);
     const tdPrice = createTdWithText('$' + product.productPrice);
     const tdStock = createTdWithText(product.productStock);
-    const tdUpdate = createTdWithUpdateButton();
-    const tdDelete = createTdWithDeleteButton();
-    [tdName, tdDescription, tdPrice, tdStock, tdUpdate, tdDelete]
+    [tdName, tdDescription, tdPrice, tdStock]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
 
-function createProductList(id, categoryName, products) {
+function createProductList(id, categoryName, products, categoryDescription) {
+    const generalPriceNum = products.map(p => p.productStock * p.productPrice)
+            .reduce((a, c) => a + c, 0);
+
     const div = document.createElement("div");
     div.setAttribute("id", id);
     div.setAttribute("class", "product-list");
@@ -128,6 +215,14 @@ function createProductList(id, categoryName, products) {
     const categoryNameDiv = document.createElement("div");
     categoryNameDiv.setAttribute("class", "category-name");
     categoryNameDiv.innerText = categoryName;
+
+    const categoryDescriptionDiv = document.createElement("div");
+    categoryDescriptionDiv.setAttribute("class", "category-description");
+    categoryDescriptionDiv.innerText = categoryDescription;
+
+    const generalCatPrice = document.createElement("div");
+    generalCatPrice.setAttribute("class", "category-description");
+    generalCatPrice.innerText = "$" + generalPriceNum.toFixed(2);
 
     const productTable = document.createElement("table");
     productTable.setAttribute("class", "product-table");
@@ -163,12 +258,22 @@ function createProductList(id, categoryName, products) {
     productTable.appendChild(tableHead);
     productTable.appendChild(tableBody);
 
+    //Update Delete buttons
+    const updateButton = createUpdateButton();
+    const deleteButton = createDeleteButton();
+    const buttonContainer = document.createElement("div");
+    buttonContainer.appendChild(updateButton);
+    buttonContainer.appendChild(deleteButton);
+
     div.appendChild(categoryNameDiv);
+    div.appendChild(categoryDescriptionDiv);
+    div.appendChild(generalCatPrice);
     div.appendChild(productTable);
+    div.appendChild(buttonContainer);
     productListContainer.appendChild(div);
 }
 
-function createCategory(name, products) {
+function createCategory(name, products, categoryDescription) {
     const number = productListsCounter++;
     const id = "product-list-" + number;
     const div = document.createElement("div");
@@ -179,7 +284,7 @@ function createCategory(name, products) {
     nameDiv.innerText = name;
     div.appendChild(nameDiv)
     categoryContainer.appendChild(div);
-    createProductList(id, name, products);
+    createProductList(id, name, products, categoryDescription);
 }
 
 function toggleProductList(id) {
@@ -191,7 +296,7 @@ function switchToManagingProductList() {
     window.location.href = "../product_list/product_list.html";
 }
 
-async function sendRequest(url, queryType, data)
+async function sendRequest(url, queryType, data, errorMessage)
 {
     try {
         const res = await fetch(API + url, {
@@ -217,19 +322,20 @@ async function sendRequest(url, queryType, data)
     }
 }
 
-function getCategoryNames(products) {
-    return [...new Set(products.map(product => product.categoryName))];
+async function getCategories() {
+    const res = await sendRequest("/categories", "GET");
+    const data = await res.json();
+    console.log("Categories:", data);
+    return data.map(readCategory);
 }
 
-function getCategoryNamesToProducts(categoryNames, allProducts) {
-    let res = {};
-    categoryNames.forEach(categoryName => {
-        const productsOfCategory = allProducts
-            .filter(product => product.categoryName === categoryName);
-        res[categoryName] = productsOfCategory;
-    });
-
-    return res;
+function clearAllGroups() {
+    while (categoryContainer.firstChild) {
+        categoryContainer.removeChild(categoryContainer.firstChild);
+    }
+    while (productListContainer.firstChild) {
+        productListContainer.removeChild(productListContainer.firstChild);
+    }
 }
 
 async function refreshAllProductsData() {
@@ -237,22 +343,61 @@ async function refreshAllProductsData() {
     if(res) {
         const data = await res.json();
         const products = data.map(readProduct);
-        const categoryNames = getCategoryNames(products);
-        const catsToProds = getCategoryNamesToProducts(categoryNames, products);
-        Object.entries(catsToProds)
-            .forEach(([catName, products]) => createCategory(catName, products));
+        const categories = await getCategories();
+        clearAllGroups();
+        categories.forEach(category => {
+            const prodsOfCat = products.filter(product => product.categoryName === category.categoryName);
+            console.log("cat:", category.categoryDescription);
+            createCategory(category.categoryName, prodsOfCat, category.categoryDescription);
+        });
     } else {
         console.log("Error request.");
     }
 }
 
-async function main() {
+async function deleteCategory(categoryName) {
+    await sendRequest("/category?category_name=" + categoryName, "DELETE");
     await refreshAllProductsData();
 }
 
+async function onCategoryDelete(event) {
+    const button = event.target;
+    const productList = button.parentNode.parentNode;
+    const categoryName = productList.getElementsByClassName("category-name")[0].textContent;
+    await deleteCategory(categoryName);
+}
+
+async function sendCreatingCategory() {
+    const res = await sendRequest("/category", "PUT", 
+    newCategory(nameInputCreate.value, descriptionInputCreate.value), "Invalid input!");
+    return res;
+}
+
+async function onFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendCreatingCategory();
+    await refreshAllProductsData();
+    console.log("Creation res:", res);
+    if(res) {
+        closeForm();
+        clearCreateFormFields();
+    }
+}
+
+async function main() {
+    await refreshAllProductsData();
+    manageGroupsButton.addEventListener("click", switchToManagingProductList);
+
+    //Create form:
+    form_open_button.addEventListener("click", openForm);
+    closeFormButton.addEventListener("click", closeForm);
+    submitCreateFormButton.addEventListener("click", onFormSubmitted);
+
+    submitUpdateFormButton.addEventListener("click", onUpdateFormSubmitted);
+    closeUpdateFormButton.addEventListener("click", closeUpdateForm);
+}
+
 main();
-  
-manageGroupsButton.addEventListener("click", switchToManagingProductList);
 
 // createCategory("CategoryNEW", [
 //     newProduct("Good1", "CategoryNew", "Some wonderful and big description that Gogi would like", 123, 13.42, "Gogi"),

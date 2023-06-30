@@ -102,12 +102,36 @@
     #form_open_button {
       position: fixed;
       background-color: #4CAF50;
-      bottom: 20px; /* Adjust the distance from the bottom as needed */
-      right: 10px; /* Adjust the distance from the right as needed */
-      z-index: 999; /* Ensure the button appears above other elements */
+      bottom: 20px; 
+      right: 20px; 
+      z-index: 999; 
     }
 
     #form_open_button:hover {
+        background-color: #353835;
+    }
+
+    #search_form_open_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; 
+      right: 70px; 
+      z-index: 999; 
+    }
+
+    #search_form_open_button:hover {
+        background-color: #353835;
+    }
+
+    #refresh_search_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; 
+      right: 150px; 
+      z-index: 999; 
+    }
+
+    #refresh_search_button:hover {
         background-color: #353835;
     }
 
@@ -185,10 +209,30 @@
       color: #fff;
       margin-top: 10px;
     }
+    #notification {
+      position: fixed;
+      padding: 5px;
+      display: none;
+      border-radius: 5px;
+      z-index: 9999;
+      top: 20px;
+      color: white;
+      transition: .3;
+    }
+
+    .notification_danger {
+      background-color: red;
+    }
+
+    .notification_success {
+      background-color: green;
+    }
   </style>
 </head>
 <body>
   <button id="form_open_button" type="button" class="btn btn-primary">+</button>
+  <button id="search_form_open_button" type="button" class="btn btn-primary">Search</button>
+  <button id="refresh_search_button" type="button" class="btn btn-primary">Refresh</button>
   <table>
     <thead>
       <tr>
@@ -197,7 +241,9 @@
         <th>Description</th>
         <th>Stock</th>
         <th class="align-right">Price</th>
+        <th class="align-right">General Price</th>
         <th class="align-right">Producer</th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
@@ -218,33 +264,114 @@
   <div id="form_popup" class="form-popup">
     <div class="form-container">
       <h2>Add Product</h2>
-      <form>
+      <form id="createForm">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="nameInputCreate" name="name" required>
 
         <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <input type="text" id="categoryInputCreate" name="category" required>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputCreate" name="description"></textarea>
 
         <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required>
+        <input type="number" id="stockInputCreate" pattern="^\d+$" title="integer value" name="stock" required>
 
         <label for="price">Price:</label>
-        <input type="text" id="price" name="price" required>
+        <input type="text" id="priceInputCreate" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price" required>
 
         <label for="producer">Producer:</label>
-        <input type="text" id="producer" name="producer" required>
+        <input type="text" id="producerInputCreate" name="producer">
 
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" id="submitCreateFormButton" class="btn btn-primary">Add</button>
         <button id="closeFormButton" type="button" class="btn btn-delete">Cancel</button>
       </form>
     </div>
   </div>
+  <div id="plus_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Add</h2>
+      <form id="plusForm">
+        <input type="text" id="plusInput" name="name" required>
+        <button type="submit" id="submitPlusFormButton" class="btn btn-primary">Add</button>
+        <button id="closePlusButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  <div id="plus_form_popup2" class="form-popup">
+    <div class="form-container">
+      <h2>Sell</h2>
+      <form id="plusForm2">
+        <input type="text" id="plusInput2" name="name" required>
+        <button type="submit" id="submitPlusFormButton2" class="btn btn-primary">Sell</button>
+        <button id="closePlusButton2" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="search_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Search Product</h2>
+      <form id="searchForm">
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputSearch" name="name">
+
+        <label for="category">Category:</label>
+        <input type="text" id="categoryInputSearch" name="category">
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputSearch" name="description"></textarea>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stockInputSearch" pattern="^\d+$" title="integer value" name="stock">
+
+        <label for="price">Price:</label>
+        <input type="text" id="priceInputSearch" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price">
+
+        <label for="producer">Producer:</label>
+        <input type="text" id="producerInputSearch" name="producer">
+
+        <button type="submit" id="submitSearchFormButton" class="btn btn-primary">Search</button>
+        <button id="closeSearchFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="update_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Update Product</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputUpdate" name="name" readonly>
+
+        <label for="category">Category:</label>
+        <input type="text" id="categoryInputUpdate" name="category" required>
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputUpdate" name="description"></textarea>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stockInputUpdate" pattern="^\d+$" title="integer value" name="stock" required>
+
+        <label for="price">Price:</label>
+        <input type="text" id="priceInputUpdate" pattern="^-?\d+(\.\d+)?$" title="decimal value" name="price" required>
+
+        <label for="producer">Producer:</label>
+        <input type="text" id="producerInputUpdate" name="producer">
+
+        <button type="submit" id="submitUpdateFormButton" class="btn btn-primary">Update</button>
+        <button id="closeUpdateFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  
 
   <div class="manage-groups-container">
     <button id="manageGroupsBtn" class="manage-groups-button">Manage Groups</button>
+  </div>
+  <div id="notification", class="notification_danger">
   </div>
   <script src="product_list.js"></script>
 </body>

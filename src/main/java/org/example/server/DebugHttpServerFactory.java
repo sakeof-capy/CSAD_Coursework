@@ -4,7 +4,7 @@ import org.example.exceptions.CreationException;
 import org.example.exceptions.HolderException;
 import org.example.factories.TwoParamFactory;
 import org.example.server.contexts.StorageContext;
-import org.example.server.contexts.executors.StandardExecutor;
+import org.example.server.contexts.executors.DebugExecutor;
 import org.example.storage.Storage;
 import org.example.storage.operations.factory.OperationType;
 import org.example.storage.operations.factory.StorageOperationFactoryAttacher;
@@ -12,15 +12,15 @@ import org.example.storage.operations.factory.StorageOperationFactoryAttacher;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-public class StandardHttpServerFactory implements TwoParamFactory<Server, Storage, InetSocketAddress> {
+public class DebugHttpServerFactory implements TwoParamFactory<Server, Storage, InetSocketAddress> {
     @Override
     public Server create(Storage storage, InetSocketAddress port) throws CreationException {
         try {
             final var server = new StandardHttpServer(port, 10);
             final var operationFactory = StorageOperationFactoryAttacher.factoryOf(storage);
-            final var operationExecutor = new StandardExecutor();
+            final var operationExecutor = new DebugExecutor();
 
-            final var storageContext = new StorageContext(operationFactory, operationExecutor);
+            var storageContext = new StorageContext(operationFactory, operationExecutor);
             storageContext.mapEndpointToOperation("GET", "/api/products", OperationType.READ_PRODUCT);
             storageContext.mapEndpointToOperation("PUT", "/api/product", OperationType.CREATE_PRODUCT);
             storageContext.mapEndpointToOperation("POST", "/api/product/{product_name}", OperationType.UPDATE_PRODUCT);
@@ -29,9 +29,8 @@ public class StandardHttpServerFactory implements TwoParamFactory<Server, Storag
             storageContext.mapEndpointToOperation("GET", "/api/categories", OperationType.READ_CATEGORY);
             storageContext.mapEndpointToOperation("PUT", "/api/category", OperationType.CREATE_CATEGORY);
             storageContext.mapEndpointToOperation("POST", "/api/category/{category_name}", OperationType.UPDATE_CATEGORY);
-            storageContext.mapEndpointToOperation("DELETE", "/api/category/{category_name}", OperationType.DELETE_CATEGORY);
+            storageContext.mapEndpointToOperation("DELETE", "/api/category/{category_name~}", OperationType.DELETE_CATEGORY);
 
-            storageContext.mapEndpointToOperation("POST", "/api/products", OperationType.READ_PRODUCT);
             server.addContext("/api", storageContext);
             return server;
         } catch (IOException | HolderException e) {

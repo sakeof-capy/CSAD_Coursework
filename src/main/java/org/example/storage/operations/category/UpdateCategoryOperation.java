@@ -1,5 +1,6 @@
 package org.example.storage.operations.category;
 
+import org.example.exceptions.storage.InvalidParamSetException;
 import org.example.exceptions.storage.NotFoundException;
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.Storage;
@@ -29,7 +30,7 @@ public class UpdateCategoryOperation implements StorageOperation {
 
             return Optional.empty();
         } catch (NoSuchElementException e) {
-            throw new RuntimeException(e);
+            throw new InvalidParamSetException(e.getMessage());
         } catch (SQLException e) {
             throw new NotFoundException("No such category found!!!");
         }

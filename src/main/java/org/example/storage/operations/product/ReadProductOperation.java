@@ -1,5 +1,6 @@
 package org.example.storage.operations.product;
 
+import org.example.exceptions.storage.InvalidParamSetException;
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.Storage;
 import org.example.storage.operations.StorageOperation;
@@ -13,34 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class ReadProductOperation implements StorageOperation {
-    private Storage creator = null;
+    private final Storage creator;
 
     public ReadProductOperation(Storage creator){
         this.creator = creator;
     }
     @Override
     public Optional<List<DynamicObject>> execute(DynamicObject params) throws StorageException {
-        String productName = "";
-        String categoryName = "";
         try {
-            String addition = "";
-
-            productName = params.get("product_name").orElse("");
-
-            categoryName = params.get("category_name").orElse("");
-
-            if (!productName.equals("")){
-                addition = String.format(" where product_name = '%s'", productName);
-            }
-            if (!categoryName.equals("")){
-                if (addition.equals("")){
-                    addition = String.format(" where category_name = '%s'", categoryName);
-                } else {
-                    addition += String.format(" and category_name = '%s'", categoryName);
-                }
-            }
+            final var filter = filterFrom(params);
             List<DynamicObject> resultList = new ArrayList<>();
-            ResultSet resultSet = creator.executeQuery("select * from product" + addition);
+            ResultSet resultSet = creator.executeQuery("select * from product" + filter);
             while(resultSet.next()){
                 DynamicObject object = new StandardDynamicObject();
                 object.put("product_name", resultSet.getString("product_name"));
@@ -54,8 +38,20 @@ public class ReadProductOperation implements StorageOperation {
             resultSet.close();
             return Optional.of(resultList);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new InvalidParamSetException(e.getMessage());
         }
+    }
 
+    private String filterFrom(DynamicObject params) {
+        if(params.getMap().isEmpty())
+            return "";
+        final var pairs = params.getMap()
+                .entrySet()
+                .stream()
+                .filter(entry -> !entry.getValue().isEmpty())
+                .map(entry -> entry.getKey() + " = '" + entry.getValue() + "'")
+                .toList();
+        final var joined = String.join(" AND ", pairs);
+        return " WHERE " + joined;
     }
 }

@@ -37,6 +37,13 @@
       color: #333;
     }
 
+    .category-description {
+      font-size: 18px;
+      font-weight: initial;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
     .product-table {
       width: 100%;
       border-collapse: collapse;
@@ -67,10 +74,14 @@
     }
 
     .btn-update {
+      margin-top: 10px;
+      margin-right: 5px;
       background-color: #4caf50;
     }
 
     .btn-delete {
+      margin-top: 10px;
+      margin-left: 5px;
       background-color: #f44336;
     }
 
@@ -96,53 +107,152 @@
     .manage-groups-button:hover {
         background-color: #353835;
     }
+
+    #form_open_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px;
+      right: 10px;
+      z-index: 999;
+    }
+
+    #form_open_button:hover {
+        background-color: #353835;
+    }
+
+    #form_open_button {
+      position: fixed;
+      background-color: #4CAF50;
+      bottom: 20px; 
+      right: 10px; 
+      z-index: 999; 
+    }
+
+    #form_open_button:hover {
+        background-color: #353835;
+    }
+
+    .form-popup {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f2f2f2;
+      padding: 20px;
+      max-width: 400px;
+      margin: 50px auto;
+      border-radius: 4px;
+    }
+
+    .form-container textarea {
+      height: 80px;
+      resize: none;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+
+    .form-container label {
+      font-weight: bold;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="number"],
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .form-container textarea {
+      height: 80px;
+    }
+
+    .form-container button[type="submit"],
+    .form-container button[type="button"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-container button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .form-container button[type="button"] {
+      background-color: #f44336;
+      color: #fff;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
+    <button id="form_open_button" type="button" class="btn btn-primary">+</button>
     <div class="manage-groups-container">
         <button id="manageGroupsButton" class="manage-groups-button">Manage Products</button>
     </div>
   <div id="categoryContainer" class="category-container">
-    <!-- <div class="category" onclick="toggleProductList(product-list-1)">
-      <div class="category-name">Category 1</div>
-    </div> -->
+    
   </div>
 
   <div id="productListContainer" class="product-list-container">
-    <!-- <div id="product-list-1" class="product-list" >
-      <div class="category-name">Category 1</div>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 1</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$19.99</td>
-            <td>10</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-          <tr>
-            <td>Product 2</td>
-            <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-            <td>$29.99</td>
-            <td>5</td>
-            <td class="btn-container"><button class="btn btn-update">Update</button></td>
-            <td class="btn-container"><button class="btn btn-delete">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
+    
   </div>
+
+  <div id="form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Add Category</h2>
+      <form id="createForm">
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputCreate" name="name" required>
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputCreate" name="description"></textarea>
+
+        <button type="submit" id="submitCreateFormButton" class="btn btn-primary">Add</button>
+        <button id="closeFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="update_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Update Category</h2>
+      <form id="createForm">
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputUpdate" name="name" readonly>
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputUpdate" name="description" required></textarea>
+
+        <button type="submit" id="submitUpdateFormButton" class="btn btn-primary">Update</button>
+        <button id="closeUpdateFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
   <script src="category_list.js"></script>
 </body>
 </html>
