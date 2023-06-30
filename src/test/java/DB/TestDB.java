@@ -1,5 +1,8 @@
+package DB;
+
 import org.example.exceptions.storage.StorageException;
 import org.example.storage.DBConnector;
+import org.example.storage.operations.SumCounter;
 import org.example.storage.operations.product.CreateProductOperation;
 import org.example.storage.operations.product.DeleteProductOperation;
 import org.example.storage.operations.product.ReadProductOperation;
@@ -24,6 +27,8 @@ public class TestDB {
             fail(e.getMessage());
         }
         assertEquals(readProduct(creator).size(), 5);
+        SumCounter sumCounter = new SumCounter();
+        assertEquals(sumCounter.count(readProduct(creator)), 42235);
 
         for (int i = 0; i < 10; ++i){
             DynamicObject someObject = new StandardDynamicObject();

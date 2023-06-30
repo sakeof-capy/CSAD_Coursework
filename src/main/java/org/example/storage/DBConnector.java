@@ -22,18 +22,20 @@ public class DBConnector implements Storage {
         }
 
     }
-    @Override
-    public void executeUpdate(String sql) throws SQLException {
-        Statement statement;
+
+    public synchronized void executeUpdate(String sql) throws SQLException {
+        Statement statement = null;
         statement = conn.createStatement();
         statement.executeUpdate(sql);
         statement.close();
     }
 
     @Override
-    public ResultSet executeQuery(String sql) throws SQLException {
-        PreparedStatement preparedStatement = conn.prepareStatement(sql);
-        return preparedStatement.executeQuery();
+    public synchronized ResultSet executeQuery(String sql) throws SQLException {
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
     }
 
     @Override
