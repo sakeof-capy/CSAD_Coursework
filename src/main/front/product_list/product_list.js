@@ -228,7 +228,13 @@ function clear_plus_fields() {
     plusInput.value = "";
 }
 
-function openPlusForm() {
+function openPlusForm(event) {
+    const button = event.target;
+    const row = button.closest("tr");
+    const cells = row.children;
+    currentPlussingProduct = newProduct(cells[0].textContent, 
+        cells[1].textContent, cells[2].textContent, cells[3].textContent, 
+        cells[4].textContent.substring(1), cells[6].textContent);
     clear_plus_fields();
     plus_form_popup.style.display = "block";
 }
@@ -279,8 +285,28 @@ function closeUpdateForm() {
     clearUpdateFormFields();
 }
 
+async function sendPlus() {
+    const newVal = parseInt(currentPlussingProduct.in_stock) + parseInt(plusInput.value);
+    currentPlussingProduct.in_stock = newVal;
+    console.log("New prod:", currentPlussingProduct);
+    const res = await sendRequest("/product?product_name=" + currentPlussingProduct.product_name, 
+        "POST", currentPlussingProduct);
+    return res;
+}
+
+let currentPlussingProduct = undefined;
+
 async function onPlusFormSubmitted(event) {
-    const button = event.target
+    event.preventDefault();
+    if(parseInt(plusInput.value) > 0) {
+        const res = await sendPlus();
+        if(res) {
+            closePlusForm();
+            refreshAllProductsData();
+        }
+    } else {
+        notify("Invalid input!");
+    }
 }
 
 async function sendSearchingProduct() {
