@@ -54,6 +54,15 @@ const descriptionInputCreate = document.getElementById("descriptionInputCreate")
 const submitCreateFormButton = document.getElementById("submitCreateFormButton");
 const closeFormButton = document.getElementById("closeFormButton");
 
+//Update form:
+const update_form_popup = document.getElementById("update_form_popup");
+
+const nameInputUpdate = document.getElementById("nameInputUpdate");
+const descriptionInputUpdate = document.getElementById("descriptionInputUpdate");
+
+const submitUpdateFormButton = document.getElementById("submitUpdateFormButton");
+const closeUpdateFormButton = document.getElementById("closeUpdateFormButton");
+
 const API = "http://localhost:8000/api";
 let productListsCounter = 0;
 
@@ -73,6 +82,50 @@ function closeForm() {
     clearCreateFormFields();
 }
 
+let nameOfCategoryBeingUpdated = undefined;
+
+function openUpdateForm(event) {
+    const button = event.target;
+    const productList = button.parentNode.parentNode;
+    const categoryName = productList.getElementsByClassName("category-name")[0].textContent;
+    const categoryDescription = productList.getElementsByClassName("category-description")[0].textContent;
+    nameOfProductBeingUpdated = categoryName;
+    
+    nameInputUpdate.value = categoryName;
+    descriptionInputUpdate.value = categoryDescription;
+    
+    update_form_popup.style.display = "block";
+}
+
+function closeUpdateForm() {
+    update_form_popup.style.display = "none";
+    clearUpdateFormFields();
+}
+
+function clearUpdateFormFields() {
+    nameInputUpdate.value = "";
+    descriptionInputUpdate.value = "";
+}
+
+async function sendUpdatingProduct(categoryName, newDescr) {
+    console.log("Descr:", newDescr);
+    const res = await sendRequest("/category?category_name=" + categoryName, "POST", 
+    newCategory(nameInputCreate.value, newDescr), "Invalid input!");
+    return res;
+}
+
+let nameOfProductBeingUpdated = undefined;
+
+async function onUpdateFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendUpdatingProduct(nameOfProductBeingUpdated, descriptionInputUpdate.value);
+    console.log("Request res: ", res);
+    await refreshAllProductsData();
+    if(res) {
+        closeUpdateForm();
+        clearUpdateFormFields();
+    }
+}
 
 function newProduct(productName0, categoryName0, productDescription0, 
     productStock0, productPrice0, productProducer0) {
@@ -85,6 +138,13 @@ function newProduct(productName0, categoryName0, productDescription0,
             productProducer : productProducer0,
         };
     }
+
+function newCategory(categoryName, categoryDescryption) {
+    return {
+        category_name : categoryName,
+        category_description : categoryDescryption,
+    };
+}
 
 function readProduct(product) {
     return {
@@ -120,6 +180,7 @@ function createUpdateButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-update");
     button.innerText = "Update";
+    button.addEventListener("click", openUpdateForm);
     return button;
 }
 
@@ -227,7 +288,7 @@ function switchToManagingProductList() {
     window.location.href = "../product_list/product_list.html";
 }
 
-async function sendRequest(url, queryType, data)
+async function sendRequest(url, queryType, data, errorMessage)
 {
     try {
         const res = await fetch(API + url, {
@@ -298,6 +359,23 @@ async function onCategoryDelete(event) {
     await deleteCategory(categoryName);
 }
 
+async function sendCreatingCategory() {
+    const res = await sendRequest("/category", "PUT", 
+    newCategory(nameInputCreate.value, descriptionInputCreate.value), "Invalid input!");
+    return res;
+}
+
+async function onFormSubmitted(event) {
+    event.preventDefault();
+    const res = await sendCreatingCategory();
+    await refreshAllProductsData();
+    console.log("Creation res:", res);
+    if(res) {
+        closeForm();
+        clearCreateFormFields();
+    }
+}
+
 async function main() {
     await refreshAllProductsData();
     manageGroupsButton.addEventListener("click", switchToManagingProductList);
@@ -305,6 +383,10 @@ async function main() {
     //Create form:
     form_open_button.addEventListener("click", openForm);
     closeFormButton.addEventListener("click", closeForm);
+    submitCreateFormButton.addEventListener("click", onFormSubmitted);
+
+    submitUpdateFormButton.addEventListener("click", onUpdateFormSubmitted);
+    closeUpdateFormButton.addEventListener("click", closeUpdateForm);
 }
 
 main();

@@ -237,6 +237,22 @@
     </div>
   </div>
 
+  <div id="update_form_popup" class="form-popup">
+    <div class="form-container">
+      <h2>Update Category</h2>
+      <form id="createForm">
+        <label for="name">Name:</label>
+        <input type="text" id="nameInputUpdate" name="name" readonly>
+
+        <label for="description" >Description:</label>
+        <textarea id="descriptionInputUpdate" name="description" required></textarea>
+
+        <button type="submit" id="submitUpdateFormButton" class="btn btn-primary">Update</button>
+        <button id="closeUpdateFormButton" type="button" class="btn btn-delete">Cancel</button>
+      </form>
+    </div>
+  </div>
+
   <script src="category_list.js"></script>
 </body>
 </html>
