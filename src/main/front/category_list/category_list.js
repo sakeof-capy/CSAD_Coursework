@@ -44,8 +44,35 @@ const manageGroupsButton = document.getElementById("manageGroupsButton");
 const categoryContainer = document.getElementById("categoryContainer");
 const productListContainer = document.getElementById("productListContainer");
 
+//Create form:
+const form_open_button = document.getElementById("form_open_button");
+const form_popup = document.getElementById("form_popup");
+
+const nameInputCreate = document.getElementById("nameInputCreate");
+const descriptionInputCreate = document.getElementById("descriptionInputCreate");
+
+const submitCreateFormButton = document.getElementById("submitCreateFormButton");
+const closeFormButton = document.getElementById("closeFormButton");
+
 const API = "http://localhost:8000/api";
 let productListsCounter = 0;
+
+
+function clearCreateFormFields() {
+    nameInputCreate.value = "";
+    descriptionInputCreate.value = "";
+}
+
+function openForm() {
+    clearCreateFormFields();
+    form_popup.style.display = "block";
+}
+
+function closeForm() {
+    form_popup.style.display = "none";
+    clearCreateFormFields();
+}
+
 
 function newProduct(productName0, categoryName0, productDescription0, 
     productStock0, productPrice0, productProducer0) {
@@ -274,6 +301,10 @@ async function onCategoryDelete(event) {
 async function main() {
     await refreshAllProductsData();
     manageGroupsButton.addEventListener("click", switchToManagingProductList);
+
+    //Create form:
+    form_open_button.addEventListener("click", openForm);
+    closeFormButton.addEventListener("click", closeForm);
 }
 
 main();

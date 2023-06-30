@@ -160,6 +160,7 @@ function clearUpdateFormFields() {
 }
 
 function openForm() {
+    clearCreateFormFields();
     form_popup.style.display = "block";
 }
 
