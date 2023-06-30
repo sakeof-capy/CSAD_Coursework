@@ -48,6 +48,7 @@ public class ReadProductOperation implements StorageOperation {
         final var pairs = params.getMap()
                 .entrySet()
                 .stream()
+                .filter(entry -> !entry.getValue().isEmpty())
                 .map(entry -> entry.getKey() + " = '" + entry.getValue() + "'")
                 .toList();
         final var joined = String.join(" AND ", pairs);
