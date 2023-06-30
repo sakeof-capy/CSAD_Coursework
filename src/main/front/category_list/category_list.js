@@ -204,6 +204,9 @@ function createTrFromProduct(product) {
 }
 
 function createProductList(id, categoryName, products, categoryDescription) {
+    const generalPriceNum = products.map(p => p.productStock * p.productPrice)
+            .reduce((a, c) => a + c, 0);
+
     const div = document.createElement("div");
     div.setAttribute("id", id);
     div.setAttribute("class", "product-list");
@@ -216,6 +219,10 @@ function createProductList(id, categoryName, products, categoryDescription) {
     const categoryDescriptionDiv = document.createElement("div");
     categoryDescriptionDiv.setAttribute("class", "category-description");
     categoryDescriptionDiv.innerText = categoryDescription;
+
+    const generalCatPrice = document.createElement("div");
+    generalCatPrice.setAttribute("class", "category-description");
+    generalCatPrice.innerText = "$" + generalPriceNum.toFixed(2);
 
     const productTable = document.createElement("table");
     productTable.setAttribute("class", "product-table");
@@ -260,6 +267,7 @@ function createProductList(id, categoryName, products, categoryDescription) {
 
     div.appendChild(categoryNameDiv);
     div.appendChild(categoryDescriptionDiv);
+    div.appendChild(generalCatPrice);
     div.appendChild(productTable);
     div.appendChild(buttonContainer);
     productListContainer.appendChild(div);
