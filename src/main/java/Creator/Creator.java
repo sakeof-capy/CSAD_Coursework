@@ -1,11 +1,26 @@
 package Creator;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 
 public class Creator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        final var pathToPassword = "src/main/resources/password.txt";
+        FileReader reader = null;
+        try {
+            reader = new FileReader(pathToPassword);
+        } catch (FileNotFoundException e) {
+            System.err.println("Create file: " + pathToPassword + " and store your postgres password here.");
+            System.exit(-1);
+        }
+        var buffReader = new BufferedReader(reader);
+        var password = buffReader.readLine();
+
         DBFunctions db = new DBFunctions();
-        Connection conn = db.connect_to_db("client-server", "postgres", "root");
+        Connection conn = db.connect_to_db("client-server", "postgres", password);
 
         //db.create_UserRole(conn);
         db.create_category(conn);
