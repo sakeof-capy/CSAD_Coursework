@@ -288,7 +288,7 @@ function openUpdateForm(event) {
     descriptionInputUpdate.value = cells[2].textContent;
     stockInputUpdate.value = cells[3].textContent;
     priceInputUpdate.value = cells[4].textContent.substring(1);
-    producerInputUpdate.value = cells[5].textContent;
+    producerInputUpdate.value = cells[6].textContent;
     
     update_form_popup.style.display = "block";
 }
