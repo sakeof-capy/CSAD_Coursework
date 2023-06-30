@@ -248,13 +248,13 @@ function openMinusForm(event) {
     currentPlussingProduct = newProduct(cells[0].textContent, 
         cells[1].textContent, cells[2].textContent, cells[3].textContent, 
         cells[4].textContent.substring(1), cells[6].textContent);
-    clear_plus_fields();
+    clear_minus_fields();
     plus_form_popup2.style.display = "block";
 }
 
 function closeMinusForm() {
     plus_form_popup2.style.display = "none";
-    clear_plus_fields();
+    clear_minus_fields();
 }
 
 function openSearchForm() {
