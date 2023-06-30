@@ -100,6 +100,7 @@ function createDeleteButton() {
     const button = document.createElement("button");
     button.setAttribute("class", "btn btn-delete");
     button.innerText = "Delete";
+    button.addEventListener("click", onCategoryDelete);
     return button;
 }
 
@@ -232,18 +233,13 @@ async function getCategories() {
     return data.map(readCategory);
 }
 
-function getCategoriesToProducts(categories, allProducts) {
-    let res = {};
-    categories.forEach(category => {
-        console.log("one category:", category)
-        const productsOfCategory = allProducts
-            .filter(product => product.categoryName === category.categoryName);
-        res[category.categoryName] = {
-            categoryDescryption: category.categoryDescription, 
-            products: productsOfCategory};
-    });
-
-    return res;
+function clearAllGroups() {
+    while (categoryContainer.firstChild) {
+        categoryContainer.removeChild(categoryContainer.firstChild);
+    }
+    while (productListContainer.firstChild) {
+        productListContainer.removeChild(productListContainer.firstChild);
+    }
 }
 
 async function refreshAllProductsData() {
@@ -252,21 +248,27 @@ async function refreshAllProductsData() {
         const data = await res.json();
         const products = data.map(readProduct);
         const categories = await getCategories();
-        const catsToProds = getCategoriesToProducts(categories, products);
+        clearAllGroups();
         categories.forEach(category => {
             const prodsOfCat = products.filter(product => product.categoryName === category.categoryName);
             console.log("cat:", category.categoryDescription);
             createCategory(category.categoryName, prodsOfCat, category.categoryDescription);
         });
-        // console.log("catsToProds", catsToProds);
-        // Object.entries(catsToProds)
-        //     .forEach(([catName, desProds]) => {
-        //         console.log("catName:", catName, "desProds:",desProds);
-        //         createCategory(catName, desProds.products, desProds.categoryDescription);
-        //     });
     } else {
         console.log("Error request.");
     }
+}
+
+async function deleteCategory(categoryName) {
+    await sendRequest("/category?category_name=" + categoryName, "DELETE");
+    await refreshAllProductsData();
+}
+
+async function onCategoryDelete(event) {
+    const button = event.target;
+    const productList = button.parentNode.parentNode;
+    const categoryName = productList.getElementsByClassName("category-name")[0].textContent;
+    await deleteCategory(categoryName);
 }
 
 async function main() {
