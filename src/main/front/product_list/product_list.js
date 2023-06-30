@@ -80,6 +80,7 @@ function notify(text)
 let productsCounter = 0;
 
 function createTrFromProduct(product) {
+    const generalPrice = product.productPrice * product.productStock;
     const tr = document.createElement("tr");
     const trId = "product-id-" + (productsCounter++);
     tr.setAttribute("id", trId);
@@ -88,10 +89,11 @@ function createTrFromProduct(product) {
     const tdDescription = createTdWithText(product.productDescription);
     const tdStock = createTdWithText(product.productStock);
     const tdPrice = createTdWithText('$' + product.productPrice);
+    const tdGenPrice = createTdWithText('$' + generalPrice.toFixed(2));
     const tdProducer = createTdWithText(product.productProducer);
     const tdUpdate = createTdWithUpdateButton();
     const tdDelete = createTdWithDeleteButton();
-    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdProducer, tdUpdate, tdDelete]
+    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer, tdUpdate, tdDelete]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
