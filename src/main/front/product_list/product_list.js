@@ -93,7 +93,9 @@ function createTrFromProduct(product) {
     const tdProducer = createTdWithText(product.productProducer);
     const tdUpdate = createTdWithUpdateButton();
     const tdDelete = createTdWithDeleteButton();
-    [tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer, tdUpdate, tdDelete]
+    const tdPlus = createTdWithPlusButton();
+    const tdMinus = createTdWithMinusButton();
+    [tdPlus, tdMinus,tdName, tdCategory, tdDescription, tdStock, tdPrice, tdGenPrice, tdProducer, tdUpdate, tdDelete]
         .forEach(elem => tr.appendChild(elem));
     return tr;
 }
@@ -140,6 +142,32 @@ function createTdWithUpdateButton() {
     button.setAttribute("class", "btn btn-update");
     button.innerText = "Update";
     button.addEventListener("click", openUpdateForm);
+    
+    td.appendChild(button);
+    return td;
+}
+
+function createTdWithPlusButton() {
+    const td = document.createElement("td");
+    td.setAttribute("class", "btn-container");
+
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-update");
+    button.innerText = "+";
+    // button.addEventListener("click", openUpdateForm);
+    
+    td.appendChild(button);
+    return td;
+}
+
+function createTdWithMinusButton() {
+    const td = document.createElement("td");
+    td.setAttribute("class", "btn-container");
+
+    const button = document.createElement("button");
+    button.setAttribute("class", "btn btn-delete");
+    button.innerText = "-";
+    // button.addEventListener("click", openUpdateForm);
     
     td.appendChild(button);
     return td;
